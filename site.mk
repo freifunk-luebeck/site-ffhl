@@ -10,7 +10,6 @@ GLUON_SITE_PACKAGES := \
 	gluon-mesh-vpn-fastd \
 	gluon-autoupdater \
 	gluon-radvd \
-	htop \
 	iwinfo \
 	iptables \
 	haveged
