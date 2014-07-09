@@ -1,16 +1,23 @@
-PWD=$(pwd)
-SCRIPTDIR=$(dirname $0)
-cd ${SCRIPTDIR}
+#!/bin/bash
 
+set -e
+set -x
+
+SCRIPTDIR=$(dirname $0)
+
+pushd ${SCRIPTDIR}
 eval `make -s -f helper.mk`
 echo "GLUON_CHECKOUT: ${GLUON_CHECKOUT}"
 
-cd ..
+pushd ..
+git co master
+git pull
 git co ${GLUON_CHECKOUT}
 make clean
 make update
 make -j4
-cd -
+popd
 
-cd ${PWD}
+popd
+
 exit 0
