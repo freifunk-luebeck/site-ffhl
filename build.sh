@@ -10,9 +10,9 @@ eval `make -s -f helper.mk`
 echo "GLUON_CHECKOUT: ${GLUON_CHECKOUT}"
 
 pushd ..
-git co master
+git checkout master
 git pull
-git co ${GLUON_CHECKOUT}
+git checkout ${GLUON_CHECKOUT}
 make clean
 make update
 make -j4
