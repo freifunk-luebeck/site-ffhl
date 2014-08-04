@@ -10,7 +10,7 @@ Gluon repository](https://github.com/freifunk-gluon/gluon) at GitHub.
 
     git clone git://github.com/freifunk-gluon/gluon.git         # Get the official Gluon repository
     cd gluon
-    git clone git://github.com/FreifunkMD/site-ffhh.git site    # Get the Freifunk Hamburg site repository
+    git clone git://github.com/FreifunkMD/site-ffmd.git site    # Get the Freifunk Magdeburg site repository
     ./site/build.sh
 
 Gluon versions used for specific Magdeburg Freifunk Firmware builds
