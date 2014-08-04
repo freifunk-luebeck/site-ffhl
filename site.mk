@@ -22,6 +22,6 @@ DEFAULT_GLUON_CHECKOUT := v2014.2
 # Allow overriding the checkout from the command line
 GLUON_CHECKOUT ?= $(DEFAULT_GLUON_CHECKOUT)
 
-DEFAULT_GLUON_RELEASE := $(shell git -C $(this_dir) describe --tags --always --dirty --match "v*" | sed 's/^v//')
+DEFAULT_GLUON_RELEASE := $(shell git --git-dir=$(this_dir)/.git --work-tree=$(this_dir) describe --tags --always --dirty --match "v*" | sed 's/^v//')
 # Allow overriding the release number from the command line
 GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
