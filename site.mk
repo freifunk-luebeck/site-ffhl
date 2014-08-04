@@ -4,22 +4,21 @@ GLUON_SITE_PACKAGES := \
 	gluon-config-mode \
 	gluon-ebtables-filter-multicast \
 	gluon-ebtables-filter-ra-dhcp \
-	gluon-firewall \
 	gluon-legacy \
 	gluon-luci-admin \
 	gluon-luci-autoupdater \
 	gluon-next-node \
+	gluon-ath9k-workaround \
 	gluon-mesh-batman-adv \
 	gluon-mesh-vpn-fastd \
 	gluon-radvd \
 	gluon-status-page \
-	gluon-firewall \
 	iwinfo \
 	iptables \
-	haveged
+	haveged 
 
 
-DEFAULT_GLUON_RELEASE := 0.4.1+0-exp$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := 0.4.2+0-exp$(shell date '+%Y%m%d')
 
 # Allow overriding the release number from the command line
 GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
