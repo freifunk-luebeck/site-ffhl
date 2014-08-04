@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -e
-set -x
 
 SCRIPTDIR=$(dirname $0)
 
@@ -15,7 +14,8 @@ git pull
 git checkout ${GLUON_CHECKOUT}
 make clean
 make update
-make -j4
+make all -j4
+make manifest
 popd
 
 popd
