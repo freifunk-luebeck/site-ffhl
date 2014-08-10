@@ -1,12 +1,15 @@
 GLUON_SITE_PACKAGES := \
 	gluon-alfred \
+	gluon-announced \
 	gluon-autoupdater \
+	gluon-luci-portconfig \
 	gluon-config-mode \
 	gluon-ebtables-filter-multicast \
 	gluon-ebtables-filter-ra-dhcp \
 	gluon-legacy \
 	gluon-luci-admin \
 	gluon-luci-autoupdater \
+	gluon-luci-portconfig \
 	gluon-next-node \
 	gluon-ath9k-workaround \
 	gluon-mesh-batman-adv \
@@ -18,7 +21,10 @@ GLUON_SITE_PACKAGES := \
 	haveged 
 
 
-DEFAULT_GLUON_RELEASE := 0.4.2+0-exp$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := 0.5.0+0-exp$(shell date '+%Y%m%d')
 
 # Allow overriding the release number from the command line
 GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
+
+
+GLUON_PRIORITY ?= 0
