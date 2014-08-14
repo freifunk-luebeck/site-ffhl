@@ -12,10 +12,11 @@ print_usage() {
     echo ''
     echo 'Options:'
     echo '  -h  show this help'
+    echo '  -v  verbose mode'
 }
 
 # command line options handling
-ARGS=`getopt h $*`
+ARGS=`getopt hv $*`
 if [ $? -ne 0 ]
 then
     print_usage
@@ -29,6 +30,10 @@ do
         -h)
             print_usage
             exit 0
+            ;;
+        -v)
+            VERBOSE='V=s'
+            shift
             ;;
         --)
             shift; break;;
@@ -73,10 +78,10 @@ pushd ..
 git checkout master
 git pull
 git checkout ${GLUON_CHECKOUT}
-make clean
-make update
-make all -j4
-make manifest
+make clean $VERBOSE
+make update $VERBOSE
+make -j4 $VERBOSE
+make manifest $VERBOSE
 popd
 
 popd
