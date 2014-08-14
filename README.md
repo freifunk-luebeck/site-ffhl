@@ -1,11 +1,11 @@
-Freifunk Magdeburg specific Gluon configuration
+Freifunk-Magdeburg-specific Gluon configuration
 ===============================================
 
 How to build the Freifunk Magdeburg Firmware
 --------------------------------------------
 
-This is building FFMD firmware in a nutshell. For more options or
-building specific branches please see our build script or [the official
+This is building FFMD firmware in a nutshell. For more on options or
+building specific branches please refer to the build script or [the official
 Gluon repository](https://github.com/freifunk-gluon/gluon) at GitHub.
 
     git clone git://github.com/freifunk-gluon/gluon.git         # Get the official Gluon repository
@@ -21,12 +21,12 @@ Gluon versions used for specific Magdeburg Freifunk Firmware builds
   * see http://gluon.readthedocs.org/en/latest/releases/v2014.3.html
 * 0.28: *gluon 2014.2*
   * **note** first version with specific gluon version, previous were
-    just build from arbitrary master states
-  * new build script to make above possible
+    simply built from arbitrary master states
+  * new build script to enable the above
   * added package gluon-firewall
-  * replaced FFHL keys for autoupdate with FFMD keys
-  * changed autoupdate URLs for later
+  * replaced FFHL auto-update keys by FFMD keys
+  * changed auto-update URLs for later use
 * 0.27
-  * add Link to the registerseite
+  * added link to the registerseite
 * 0.26
   * first ffmd gluon version
