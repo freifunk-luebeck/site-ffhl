@@ -16,9 +16,15 @@ Gluon repository](https://github.com/freifunk-gluon/gluon) at GitHub.
 Gluon versions used for specific Magdeburg Freifunk Firmware builds
 -------------------------------------------------------------------
 
-* 0.28: v2014.2
-  * note: first version with specific gluon version, previous were just
-    build from arbitrary master states
+* 0.29: *gluon 2014.3*
+  * see http://gluon.readthedocs.org/en/latest/releases/v2014.3.html
+* 0.28: *gluon 2014.2*
+  * **note** first version with specific gluon version, previous were
+    just build from arbitrary master states
+  * new build script to make above possible
+  * added package gluon-firewall
+  * replaced FFHL keys for autoupdate with FFMD keys
+  * changed autoupdate URLs for later
 * 0.27
   * add Link to the registerseite
 * 0.26
