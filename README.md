@@ -8,12 +8,26 @@ This is building FFMD firmware in a nutshell. For more on options or
 building specific branches please refer to the build script or [the official
 Gluon repository](https://github.com/freifunk-gluon/gluon) at GitHub.
 
+The building requires packages for subversion, ncurses headers 
+(libncurses-dev) and zlib headers (libz-dev).
+
+With Debian Linux, install by:
+
+    sudo aptitude install subversion libz-dev libncurses5-dev
+
+then download and build as follows:
+
     git clone git://github.com/freifunk-gluon/gluon.git         # Get the official Gluon repository
     cd gluon
     git clone git://github.com/FreifunkMD/site-ffmd.git site    # Get the Freifunk Magdeburg site repository
     make update							# Fetch all repositories
     ./site/build.sh
 
+In order to get a more verbose output, e.g. in case of build errors,
+you can call
+
+    ./site/build.sh -v
+    
 Gluon versions used for specific Magdeburg Freifunk Firmware builds
 -------------------------------------------------------------------
 
