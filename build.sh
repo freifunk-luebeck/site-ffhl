@@ -50,8 +50,14 @@ else
 fi
 
 case "xx$GLUON_BRANCH" in
-    'xxstable'|'xxbeta'|'xxexperimental')
-        # fine
+    'xxstable')
+        GLUON_PRIORITY=14
+        ;;
+    'xxbeta')
+        GLUON_PRIORITY=3
+        ;;
+    'xxexperimental')
+        # use default GLUON_PRIORITY set in site.mk
         ;;
     *)
         echo "Unknown GLUON_BRANCH '$1'."
@@ -60,6 +66,8 @@ case "xx$GLUON_BRANCH" in
         ;;
 esac
 
+export GLUON_BRANCH GLUON_PRIORITY
+
 # get GLUON_CHECKOUT from site dir
 pushd ${SCRIPTDIR}
 eval `make -s -f helper.mk`
@@ -67,13 +75,14 @@ echo "GLUON_CHECKOUT: ${GLUON_CHECKOUT}"
 
 # build
 pushd ..
+make clean $VERBOSE
 git checkout master
 git pull
 git checkout ${GLUON_CHECKOUT}
 make clean $VERBOSE
 make update $VERBOSE
 make -j4 $VERBOSE
-GLUON_BRANCH=${GLUON_BRANCH} make manifest $VERBOSE
+make manifest $VERBOSE
 popd
 
 popd
