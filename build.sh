@@ -75,6 +75,7 @@ echo "GLUON_CHECKOUT: ${GLUON_CHECKOUT}"
 
 # build
 pushd ..
+make clean $VERBOSE
 git checkout master
 git pull
 git checkout ${GLUON_CHECKOUT}
