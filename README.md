@@ -45,7 +45,7 @@ Verify a successful upgrade by
 * checking that the node is back up and running (i.e. visible in the nodes list)
 * checking that the host name and your login data are still available. A failed sysupgrade may leave the node in a state of running Freifunk with a weird configuration.
 
-Gluon versions used for specific Magdeburg Freifunk Firmware builds
+Gluon versions used for specific Freifunk Magdeburg Firmware builds
 -------------------------------------------------------------------
 
 * 0.29: *gluon 2014.3*
