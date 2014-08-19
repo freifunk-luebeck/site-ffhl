@@ -27,8 +27,25 @@ In order to get a more verbose output, e.g. in case of build errors,
 you can call
 
     ./site/build.sh -v
-    
-Gluon versions used for specific Magdeburg Freifunk Firmware builds
+
+Updating your node via ssh
+--------------------------------------------
+If possible, use the [Config Mode](http://gluon.readthedocs.org/en/latest/features/configmode.html) to update your node.
+
+In case you do not have physical access to your router, an update can be performed using SSH. Connect to your device via IPv6 and issue the following commands, using the firmware file that matches your device:
+
+    cd /tmp 
+    wget http://firmware.md.freifunk.net/stable/LATEST/sysupgrade/gluon-ffmd-0.28-tp-link-tl-wr841n-nd-v9-sysupgrade.bin 
+    sync; sysctl -w vm.drop_caches=3
+    sysupgrade gluon-ffmd-0.28-tp-link-tl-wr841n-nd-v9-sysupgrade.bin
+
+Be sure you know what you are doing!
+
+Verify a successful upgrade by
+* checking that the node is back up and running (i.e. visible in the nodes list)
+* checking that the host name and your login data are still available. A failed sysupgrade may leave the node in a state of running Freifunk with a weird configuration.
+
+Gluon versions used for specific Freifunk Magdeburg Firmware builds
 -------------------------------------------------------------------
 
 * 0.29: *gluon 2014.3*
