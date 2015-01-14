@@ -4,6 +4,7 @@ GLUON_SITE_PACKAGES := \
 	gluon-announced \
 	gluon-autoupdater \
 	gluon-config-mode-autoupdater \
+	gluon-authorized-keys \
 	gluon-config-mode-hostname \
 	gluon-config-mode-mesh-vpn \
 	gluon-config-mode-geo-location \
