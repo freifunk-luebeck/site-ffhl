@@ -1,11 +1,12 @@
 first build 24.12.2014:
 
-http://firmware.leipzig.freifunk.net/firmware/gluon-31c3/
+http://vpnb.leipzig.freifunk.net:8004/freifunk-gluon/
 
 
+Gluon versions used for specific Leipzig Freifunk Firmware builds:
 
-Gluon versions used for specific Lübeck Freifunk Firmware builds:
-
+* 0.7: v2015.1.2
+* 0.6: v2014.4
 * 0.5: v2014.3
 * 0.4.1: v2014.2
 * 0.4: v2014.1
