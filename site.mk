@@ -1,5 +1,4 @@
 GLUON_SITE_PACKAGES := \
-        gluon-mesh-batman-adv-15 \
         gluon-alfred \
         gluon-autoupdater \
         gluon-authorized-keys \
@@ -17,26 +16,29 @@ GLUON_SITE_PACKAGES := \
         gluon-luci-portconfig \
         gluon-luci-private-wifi \
         gluon-luci-wifi-config \
-        gluon-next-node \
         gluon-neighbour-info \
+        gluon-next-node \
+        gluon-mesh-batman-adv-15 \
         gluon-mesh-vpn-fastd \
         gluon-radvd \
-		gluon-respondd \
-        gluon-status-page \
+        gluon-respondd \
         gluon-setup-mode \
+        gluon-status-page \
         iwinfo \
         iptables \
         haveged
 
 
-DEFAULT_GLUON_CHECKOUT := master
+DEFAULT_GLUON_CHECKOUT := v2016.1
 # Allow overriding the checkout from the command line
 GLUON_CHECKOUT ?= $(DEFAULT_GLUON_CHECKOUT)
 
-DEFAULT_GLUON_RELEASE := 0.9+exp$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := 0.8+exp$(shell date '+%Y%m%d')
 
 # Allow overriding the release number from the command line
 GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
+
+GLUON_IMAGEDIR ?= $(GLUON_OUTPUTDIR)/images
 
 GLUON_PRIORITY ?= 0
 
