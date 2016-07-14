@@ -29,11 +29,11 @@ GLUON_SITE_PACKAGES := \
         haveged
 
 
-DEFAULT_GLUON_CHECKOUT := v2016.1.4
+DEFAULT_GLUON_CHECKOUT := v2016.1.5
 # Allow overriding the checkout from the command line
 GLUON_CHECKOUT ?= $(DEFAULT_GLUON_CHECKOUT)
 
-DEFAULT_GLUON_RELEASE := 1.3+exp$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := 0.8.5+exp$(shell date '+%Y%m%d')
 
 # Allow overriding the release number from the command line
 GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
