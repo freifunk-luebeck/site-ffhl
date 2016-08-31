@@ -44,6 +44,8 @@ GLUON_IMAGEDIR ?= $(GLUON_OUTPUTDIR)/images
 
 GLUON_PRIORITY ?= 0
 
+GLUON_REGION ?= eu
+
 GLUON_LANGS ?= de en
 
 # support the USB stack
