@@ -37,6 +37,8 @@ DEFAULT_GLUON_RELEASE := 0.9+exp$(shell date '+%Y%m%d')
 
 DEFAULT_GLUON_BRANCH := experimental
 
+GLUON_ATH10K_MESH ?= ibss
+
 # Allow overriding the release number from the command line
 GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
 
