@@ -8,6 +8,7 @@ http://firmware.leipzig.freifunk.net
 
 Gluon versions used for specific Leipzig Freifunk Firmware builds:
 
+* 0.9: v2016.2
 * 0.8.5.1: v2016.1.5-trunk @ https://github.com/freifunk-gluon/gluon/tree/ffd1f0b3a5b2950d8c626a2de26fb1dc8e384408
 * 0.7: v2015.1.2
 * 0.6: v2014.4
