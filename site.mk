@@ -16,7 +16,6 @@ GLUON_SITE_PACKAGES := \
 	gluon-luci-mesh-vpn-fastd \
 	gluon-luci-portconfig \
 	gluon-luci-wifi-config \
-	gluon-next-node \
 	gluon-mesh-vpn-fastd \
 	gluon-radvd \
 	gluon-respondd \
