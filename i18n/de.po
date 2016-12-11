@@ -38,3 +38,11 @@ msgstr ""
 "Lübecker Freifunk-Community findest du auf "
 "<a href=\"https://luebeck.freifunk.net/\">unserer Webseite</a>.</p>"
 "<p>Viel Spaß mit deinem Knoten und bei der Erkundung von Freifunk!</p>"
+
+msgid "gluon-config-mode:altitude-label"
+msgstr "Höhe"
+
+msgid "gluon-config-mode:altitude-help"
+msgstr ""
+"Die Höhenangabe ist optional und sollte nur gesetzt werden, wenn ein "
+"exakter Wert bekannt ist."

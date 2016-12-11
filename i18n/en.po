@@ -35,3 +35,11 @@ msgstr ""
 "You can find lots of information on the Freifunk Lübeck community on "
 "<a href=\"https://luebeck.freifunk.net/\">our homepage</a>.</p>"
 "<p>Have fun with your node while exploring the Freifunk network!</p>"
+
+msgid "gluon-config-mode:altitude-label"
+msgstr "Altitude"
+
+msgid "gluon-config-mode:altitude-help"
+msgstr ""
+"Specifying the altitude is optional and should only be done if a proper "
+"value is known."
