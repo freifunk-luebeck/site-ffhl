@@ -29,11 +29,11 @@ GLUON_SITE_PACKAGES := \
         haveged
 
 
-DEFAULT_GLUON_CHECKOUT := v2016.2
+DEFAULT_GLUON_CHECKOUT := v2016.2.2
 # Allow overriding the checkout from the command line
 GLUON_CHECKOUT ?= $(DEFAULT_GLUON_CHECKOUT)
 
-DEFAULT_GLUON_RELEASE := 0.9+exp$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := 0.9.2+exp$(shell date '+%Y%m%d')
 
 DEFAULT_GLUON_BRANCH := experimental
 
