@@ -20,7 +20,7 @@ GLUON_SITE_PACKAGES := \
         gluon-web-wifi-config \
 	gluon-web-theme \
         gluon-neighbour-info \
-        gluon-mesh-batman-adv \
+        gluon-mesh-batman-adv-15 \
 	gluon-mesh-vpn-core \
         gluon-mesh-vpn-fastd \
         gluon-radvd \
