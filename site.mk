@@ -1,26 +1,18 @@
-GLUON_SITE_PACKAGES := \
-	gluon-alfred \
-	gluon-autoupdater \
-	gluon-config-mode-autoupdater \
-	gluon-config-mode-contact-info \
-	gluon-config-mode-geo-location \
-	gluon-config-mode-hostname \
-	gluon-config-mode-mesh-vpn \
-	gluon-ebtables-filter-multicast \
-	gluon-ebtables-filter-ra-dhcp \
-	gluon-ebtables-segment-mld \
-	gluon-mesh-batman-adv-14 \
-	gluon-web-admin \
-	gluon-web-autoupdater \
-	gluon-web-mesh-vpn-fastd \
-	gluon-web-network \
-	gluon-web-wifi-config \
-	gluon-mesh-vpn-fastd \
-	gluon-radvd \
-	gluon-respondd \
-	gluon-status-page \
-	iwinfo \
-	haveged
+GLUON_FEATURES := \
+	alfred \
+	autoupdater \
+	ebtables-filter-multicast \
+	ebtables-filter-ra-dhcp \
+	ebtables-segment-mld \
+	mesh-batman-adv-14 \
+	mesh-vpn-fastd \
+	radvd \
+	respondd \
+	status-page \
+	web-advanced \
+	web-wizard
+
+GLUON_SITE_PACKAGES := haveged iwinfo
 
 
 DEFAULT_GLUON_RELEASE := 0.11~exp$(shell date '+%Y%m%d')
