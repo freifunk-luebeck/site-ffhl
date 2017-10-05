@@ -56,3 +56,19 @@ msgstr ""
 "starten und du kannst es mit Hilfe eines Netzwerkkabels am LAN-Port "
 "erreichen.</p><p>Viel Spaß mit deinem Knoten und der Erkundung von Freifunk!"
 "</p>"
+
+msgid "gluon-luci-node-role:role:node"
+msgstr ""
+"Standardknoten"
+
+msgid "gluon-luci-node-role:role:test"
+msgstr "Testgerät"
+"Testgerät"
+
+msgid "gluon-luci-node-role:role:backbone"
+msgstr ""
+"Backbone"
+
+msgid "gluon-luci-node-role:role:service"
+msgstr ""
+"Service"
