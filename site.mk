@@ -9,6 +9,7 @@ GLUON_FEATURES := \
 	respondd \
 	status-page \
 	web-advanced \
+	web-mesh-vpn-fastd \
 	web-wizard
 
 GLUON_SITE_PACKAGES := haveged iwinfo
