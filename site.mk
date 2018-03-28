@@ -18,7 +18,6 @@ GLUON_SITE_PACKAGES := \
 	gluon-web-node-role \
         gluon-web-private-wifi \
         gluon-web-wifi-config \
-	gluon-web-theme \
         gluon-neighbour-info \
         gluon-mesh-batman-adv-15 \
 	gluon-mesh-vpn-core \
