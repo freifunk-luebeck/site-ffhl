@@ -23,6 +23,7 @@ GLUON_FEATURES := \
 
 GLUON_SITE_PACKAGES := \
         gluon-alfred \
+        gluon-authorized-keys \
         gluon-neighbour-info \
         gluon-radvd \
         gluon-web-model \
