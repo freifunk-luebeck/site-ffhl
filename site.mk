@@ -11,6 +11,7 @@ GLUON_FEATURES := \
 	status-page \
 	web-advanced \
 	web-mesh-vpn-fastd \
+	web-private-wifi \
 	web-wizard
 
 GLUON_SITE_PACKAGES := haveged iwinfo
