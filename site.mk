@@ -3,6 +3,7 @@ GLUON_FEATURES := \
 	autoupdater \
 	ebtables-filter-multicast \
 	ebtables-filter-ra-dhcp \
+	ebtables-source-filter \
 	mesh-batman-adv-14 \
 	mesh-vpn-fastd \
 	radvd \
