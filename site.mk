@@ -14,7 +14,10 @@ GLUON_FEATURES := \
 	web-private-wifi \
 	web-wizard
 
-GLUON_SITE_PACKAGES := haveged iwinfo
+GLUON_SITE_PACKAGES := \
+	haveged \
+	iwinfo \
+	respondd-module-airtime
 
 
 DEFAULT_GLUON_RELEASE := 0.11~exp$(shell date '+%Y%m%d')
