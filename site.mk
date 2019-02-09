@@ -1,6 +1,7 @@
 GLUON_FEATURES := \
 	alfred \
 	autoupdater \
+	config-mode-geo-location-osm \
 	ebtables-filter-multicast \
 	ebtables-filter-ra-dhcp \
 	ebtables-source-filter \
