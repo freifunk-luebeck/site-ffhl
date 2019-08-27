@@ -2,6 +2,7 @@
 
 Gluon versions used for specific Lübeck Freifunk Firmware builds:
 
+* 0.11: [v2018.2.2](https://github.com/freifunk-gluon/gluon/commit/800c3b2bacdf3175b153413adc15ccdf802de2c8)
 * 0.10.1: [v2018.2.2](https://github.com/freifunk-gluon/gluon/commit/800c3b2bacdf3175b153413adc15ccdf802de2c8)
 * 0.10: [v2018.2](https://github.com/freifunk-gluon/gluon/commit/3699ce8c1f78d6547feaab011be114f3e239cf2f)
 * 0.9.6: [v2016.2.7-3-g35c9f9ae](https://github.com/freifunk-gluon/gluon/commit/35c9f9aecc5de53324ee61904faa1c5763d61134)
