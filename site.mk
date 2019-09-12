@@ -9,7 +9,6 @@ GLUON_FEATURES := \
 	mesh-vpn-fastd \
 	radvd \
 	respondd \
-	scheduled-domain-switch \
 	status-page \
 	web-advanced \
 	web-mesh-vpn-fastd \
@@ -32,6 +31,6 @@ GLUON_PRIORITY ?= 0
 GLUON_REGION ?= eu
 GLUON_LANGS ?= en de
 
-GLUON_WLAN_MESH=ibss
+GLUON_WLAN_MESH=11s
 
 GLUON_MULTIDOMAIN=1
