@@ -9,7 +9,6 @@ GLUON_FEATURES := \
         ebtables-filter-ra-dhcp \
         mesh-batman-adv-15 \
         mesh-vpn-fastd \
-        radvd \
         respondd \
         status-page \
         web-advanced \
@@ -55,3 +54,5 @@ GLUON_PRIORITY ?= 0
 GLUON_REGION ?= eu
 
 GLUON_LANGS ?= de en
+
+GLUON_DEPRECATED ?= full
