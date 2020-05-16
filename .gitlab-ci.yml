@@ -1,0 +1,156 @@
+image: cuechan/gluon-build:latest
+
+
+stages:
+  - init
+  - build
+  - deploy
+
+variables:
+  GLUON_DEPRECATED: full
+  FORCE_UNSAFE_CONFIGURE: 1
+  FFHL_GLUON_VERSION: v2019.1.1
+
+
+before_script:
+  - apt-get -qq update
+  - apt-get -qq install -y curl git libncurses-dev build-essential make gawk unzip wget python2.7 file tar bzip2 pandoc
+
+
+init:
+  stage: init
+  script:
+    - env | grep -i GLUON
+    - git clone -q https://github.com/freifunk-gluon/gluon.git
+    - cd gluon
+    - git checkout -q $FFHL_GLUON_VERSION
+    - git clone -q ../ site
+    - make update
+  artifacts:
+    when: always
+    paths:
+      - gluon
+
+
+.build: &build
+  stage: build
+  script:
+    - env | grep -i GLUON
+    - cd gluon
+    #- (make -j 1 V=s 2>&1) > log_gluon || { tail -n 100 log_gluon; exit 1; }
+    - (make -j $(nproc) V=s 2>&1) > log_gluon || { tail -n 100 log_gluon; exit 1; }
+  # cache:
+    # key: ${CI_COMMIT_REF_SLUG}
+    # ${CI_JOB_NAME}
+    # paths:
+      # - gluon
+  artifacts:
+    paths:
+      - gluon/output/images
+
+
+
+
+ar71xx-generic:
+  variables:
+    GLUON_TARGET: ar71xx-generic
+  <<: *build
+
+ar71xx-tiny:
+  allow_failure: true
+  variables:
+    GLUON_TARGET: ar71xx-tiny
+  <<: *build
+
+ar71xx-nand:
+  variables:
+    GLUON_TARGET: ar71xx-nand
+  <<: *build
+
+brcm2708-bcm2708:
+  variables:
+    GLUON_TARGET: brcm2708-bcm2708
+  <<: *build
+
+brcm2708-bcm2709:
+  variables:
+    GLUON_TARGET: brcm2708-bcm2709
+  <<: *build
+
+mpc85xx-generic:
+  variables:
+    GLUON_TARGET: mpc85xx-generic
+  <<: *build
+
+mpc85xx-p1020:
+  variables:
+    GLUON_TARGET: mpc85xx-p1020
+  <<: *build
+
+ramips-mt7621:
+  variables:
+    GLUON_TARGET: ramips-mt7621
+  <<: *build
+
+sunxi-cortexa7:
+  variables:
+    GLUON_TARGET: sunxi-cortexa7
+  <<: *build
+
+x86-generic:
+  variables:
+    GLUON_TARGET: x86-generic
+  <<: *build
+
+x86-geode:
+  variables:
+    GLUON_TARGET: x86-geode
+  <<: *build
+
+x86-64:
+  variables:
+    GLUON_TARGET: x86-64
+  <<: *build
+
+ipq40xx:
+  variables:
+    GLUON_TARGET: ipq40xx
+  <<: *build
+
+ramips-mt7620:
+  variables:
+    GLUON_TARGET: ramips-mt7620
+  <<: *build
+
+ramips-mt76x8:
+  variables:
+    GLUON_TARGET: ramips-mt76x8
+  <<: *build
+
+ramips-rt305x:
+  variables:
+    GLUON_TARGET: ramips-rt305x
+  <<: *build
+
+pages:
+  stage: deploy
+  script:
+    - cd gluon
+    - make manifest GLUON_BRANCH=beta GLUON_PRIORITY=0
+    - make manifest GLUON_BRANCH=stable GLUON_PRIORITY=7
+    - mkdir -p ../public/${CI_COMMIT_REF_SLUG}
+    - cp -rv output/images/ ../public/${CI_COMMIT_REF_SLUG}
+    # - cd ../public && bash ../createindex.sh ./ > index.html && cd ..
+    - cd ../public
+    - find -type f -exec printf '[{}]({}) \n\n' \; | pandoc -r markdown -w html > index.html
+    # - scp -r -P 50022 public ffhl-builder@yksflip.de:public
+  artifacts:
+    paths:
+      - public
+  cache:
+    # key: ${CI_COMMIT_REF_SLUG}
+    # ${CI_JOB_NAME}
+    paths:
+      - gluon
+  # only:
+  # - master
