@@ -16,7 +16,7 @@ before_script:
   - apt-get -qq update
   - apt-get -qq install -y curl git libncurses-dev build-essential make gawk unzip wget python2.7 file tar bzip2 pandoc rsync
   - eval $(ssh-agent -s)
-  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+  - echo "$DEPLOY_KEY" | tr -d '\r' | ssh-add -
   - mkdir -p ~/.ssh
   - '[[ -f /.dockerenv ]] && echo -e "StrictHostKeyChecking no" > ~/.ssh/config'
 
