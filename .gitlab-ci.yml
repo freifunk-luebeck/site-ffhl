@@ -18,7 +18,7 @@ before_script:
   - eval $(ssh-agent -s)
   - echo "$DEPLOY_KEY" | tr -d '\r' | ssh-add -
   - mkdir -p ~/.ssh
-  - '[[ -f /.dockerenv ]] && echo -e "StrictHostKeyChecking no" > ~/.ssh/config'
+  - '[[ -f /.dockerenv ]] && echo -e "StrictHostKeyChecking no\n Port $DEPLOY_HOST_PORT" > ~/.ssh/config'
 
 
 
@@ -149,7 +149,7 @@ upload:
     - mv output $TAG
     - find $TAG -maxdepth 2
     - ln -s $TAG latest
-    - rsync -rvhl --port=$DEPLOY_HOST_PORT ./$TAG ./latest ${DEPLOY_USER}@${DEPLOY_HOST}:uploads/
+    - rsync -rvhl ./$TAG ./latest ${DEPLOY_USER}@${DEPLOY_HOST}:uploads/
   artifacts:
     paths:
       - public
