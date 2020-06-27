@@ -135,7 +135,7 @@ x86-64:
 # ramips-rt305x:
 #   variables:
 #     GLUON_TARGET: ramips-rt305x
-  <<: *build
+#   <<: *build
 
 upload:
   stage: deploy
