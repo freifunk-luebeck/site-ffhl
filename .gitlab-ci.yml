@@ -14,7 +14,12 @@ variables:
 
 before_script:
   - apt-get -qq update
-  - apt-get -qq install -y curl git libncurses-dev build-essential make gawk unzip wget python2.7 file tar bzip2 pandoc
+  - apt-get -qq install -y curl git libncurses-dev build-essential make gawk unzip wget python2.7 file tar bzip2 pandoc rsync
+  - eval $(ssh-agent -s)
+  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+  - mkdir -p ~/.ssh
+  - '[[ -f /.dockerenv ]] && echo -e "StrictHostKeyChecking no" > ~/.ssh/config'
+
 
 
 init:
@@ -138,12 +143,13 @@ pages:
     - cd gluon
     - make manifest GLUON_BRANCH=beta GLUON_PRIORITY=0
     - make manifest GLUON_BRANCH=stable GLUON_PRIORITY=7
-    - mkdir -p ../public/${CI_COMMIT_REF_SLUG}
-    - cp -rv output/images/ ../public/${CI_COMMIT_REF_SLUG}
-    # - cd ../public && bash ../createindex.sh ./ > index.html && cd ..
-    - cd ../public
-    - find -type f -exec printf '[{}]({}) \n\n' \; | pandoc -r markdown -w html > index.html
-    # - scp -r -P 50022 public ffhl-builder@yksflip.de:public
+    # - mkdir -p ../public/${CI_COMMIT_REF_SLUG}
+    # - cp -rv output/images/ ../public/${CI_COMMIT_REF_SLUG}
+    - TAG=$(date +%F-%H-%M-%S)
+    - mv output $TAG
+    - find $TAG -maxdepth 2
+    - ln -s $TAG latest
+    - rsync -rvhl --port=$DEPLOY_HOST_PORT ./$TAG ./latest ${DEPLOY_USER}@${DEPLOY_HOST}:uploads/
   artifacts:
     paths:
       - public
