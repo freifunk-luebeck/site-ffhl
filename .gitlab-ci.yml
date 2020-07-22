@@ -37,6 +37,7 @@ init:
 
 
 .build: &build
+  needs: ['init']
   stage: build
   script:
     - env | grep -i GLUON
