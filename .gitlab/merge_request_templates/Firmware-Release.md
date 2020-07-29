@@ -21,6 +21,7 @@ Summarize changes on site-ffhl:
 
 - [ ] Build Firmware / Run CI. (Firmware for rollout should be build on trusted hardware)
 - [ ] Visually check that `output/images/*` and the contents of `output/images/sysupgrade/{stable,beta}.manifest` looks fine.
+- [ ] make sure, all desired targets were built
 - [ ] copy output images to srv01 
 
 ## Beta Release
