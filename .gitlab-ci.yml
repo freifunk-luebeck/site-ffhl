@@ -15,10 +15,7 @@ variables:
 before_script:
   - apt-get -qq update
   - apt-get -qq install -y curl git libncurses-dev build-essential make gawk unzip wget python2.7 file tar bzip2 pandoc rsync
-  - mkdir -p ~/.ssh
-  - '[[ -f /.dockerenv ]] && echo -e "StrictHostKeyChecking no\n Port $DEPLOY_HOST_PORT" > ~/.ssh/config'
-  - eval $(ssh-agent -s)
-  - echo "$DEPLOY_KEY" | ssh-add -
+
 
 
 init:
@@ -140,6 +137,10 @@ x86-64:
 upload:
   stage: deploy
   script:
+    - mkdir -p ~/.ssh
+    - 'echo -e "StrictHostKeyChecking no" > ~/.ssh/config'
+    - eval $(ssh-agent -s)
+    - echo "$DEPLOY_KEY" | ssh-add -
     - cd gluon
     - make manifest GLUON_BRANCH=beta GLUON_PRIORITY=0
     - make manifest GLUON_BRANCH=stable GLUON_PRIORITY=7
@@ -149,7 +150,7 @@ upload:
     - mv output $TAG
     - find $TAG -maxdepth 2
     - ln -s $TAG latest
-    - rsync -rvhl ./$TAG ./latest ${DEPLOY_USER}@${DEPLOY_HOST}:uploads/
+    - rsync -rvhl ./$TAG ./latest ${DEPLOY_USER}@${DEPLOY_HOST}:data/
   artifacts:
     paths:
       - public
