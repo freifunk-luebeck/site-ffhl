@@ -1,4 +1,4 @@
-image: debian:latest
+image: debian:stable
 
 
 stages:
@@ -53,86 +53,86 @@ init:
 
 
 
-# ar71xx-generic:
-#   variables:
-#     GLUON_TARGET: ar71xx-generic
-#   <<: *build
+ar71xx-generic:
+  variables:
+    GLUON_TARGET: ar71xx-generic
+  <<: *build
 
-# ar71xx-tiny:
-#   allow_failure: true
-#   variables:
-#     GLUON_TARGET: ar71xx-tiny
-#   <<: *build
+ar71xx-tiny:
+  allow_failure: true
+  variables:
+    GLUON_TARGET: ar71xx-tiny
+  <<: *build
 
-# ar71xx-nand:
-#   variables:
-#     GLUON_TARGET: ar71xx-nand
-#   <<: *build
+ar71xx-nand:
+  variables:
+    GLUON_TARGET: ar71xx-nand
+  <<: *build
 
-# brcm2708-bcm2708:
-#   variables:
-#     GLUON_TARGET: brcm2708-bcm2708
-#   <<: *build
+brcm2708-bcm2708:
+  variables:
+    GLUON_TARGET: brcm2708-bcm2708
+  <<: *build
 
 brcm2708-bcm2709:
   variables:
     GLUON_TARGET: brcm2708-bcm2709
   <<: *build
 
-# mpc85xx-generic:
-#   variables:
-#     GLUON_TARGET: mpc85xx-generic
-#   <<: *build
+mpc85xx-generic:
+  variables:
+    GLUON_TARGET: mpc85xx-generic
+  <<: *build
 
-# mpc85xx-p1020:
-#   variables:
-#     GLUON_TARGET: mpc85xx-p1020
-#   <<: *build
+mpc85xx-p1020:
+  variables:
+    GLUON_TARGET: mpc85xx-p1020
+  <<: *build
 
-# ramips-mt7621:
-#   variables:
-#     GLUON_TARGET: ramips-mt7621
-#   <<: *build
+ramips-mt7621:
+  variables:
+    GLUON_TARGET: ramips-mt7621
+  <<: *build
 
-# sunxi-cortexa7:
-#   variables:
-#     GLUON_TARGET: sunxi-cortexa7
-#   <<: *build
+sunxi-cortexa7:
+  variables:
+    GLUON_TARGET: sunxi-cortexa7
+  <<: *build
 
-# x86-generic:
-#   variables:
-#     GLUON_TARGET: x86-generic
-#   <<: *build
+x86-generic:
+  variables:
+    GLUON_TARGET: x86-generic
+  <<: *build
 
-# x86-geode:
-#   variables:
-#     GLUON_TARGET: x86-geode
-#   <<: *build
+x86-geode:
+  variables:
+    GLUON_TARGET: x86-geode
+  <<: *build
 
 x86-64:
   variables:
     GLUON_TARGET: x86-64
   <<: *build
 
-# ipq40xx:
-#   variables:
-#     GLUON_TARGET: ipq40xx
-#   <<: *build
+ipq40xx:
+  variables:
+    GLUON_TARGET: ipq40xx
+  <<: *build
 
-# ramips-mt7620:
-#   variables:
-#     GLUON_TARGET: ramips-mt7620
-#   <<: *build
+ramips-mt7620:
+  variables:
+    GLUON_TARGET: ramips-mt7620
+  <<: *build
 
-# ramips-mt76x8:
-#   variables:
-#     GLUON_TARGET: ramips-mt76x8
-#   <<: *build
+ramips-mt76x8:
+  variables:
+    GLUON_TARGET: ramips-mt76x8
+  <<: *build
 
-# ramips-rt305x:
-#   variables:
-#     GLUON_TARGET: ramips-rt305x
-#   <<: *build
+ramips-rt305x:
+  variables:
+    GLUON_TARGET: ramips-rt305x
+  <<: *build
 
 upload:
   stage: deploy
