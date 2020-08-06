@@ -149,8 +149,9 @@ upload:
     - TAG=$(date +%F-%H-%M-%S)
     - mv output $TAG
     - find $TAG -maxdepth 2
-    - ln -s $TAG latest
-    - rsync -rvhl ./$TAG ./latest ${DEPLOY_USER}@${DEPLOY_HOST}:data/
+    - ln -s ./$TAG ./latest
+    - rsync -rvhl ./$TAG ${DEPLOY_USER}@${DEPLOY_HOST}:data/
+    - rsync -rvhl ./latest ${DEPLOY_USER}@${DEPLOY_HOST}:data/
   artifacts:
     paths:
       - public
