@@ -9,7 +9,7 @@ stages:
 variables:
   GLUON_DEPRECATED: full
   FORCE_UNSAFE_CONFIGURE: 1
-  FFHL_GLUON_VERSION: v2019.1.1
+  FFHL_GLUON_VERSION: v2019.1.2
 
 
 before_script:
@@ -24,8 +24,8 @@ init:
     - env | grep -i GLUON
     - git clone -q https://github.com/freifunk-gluon/gluon.git
     - cd gluon
-    - git checkout -q $FFHL_GLUON_VERSION
-    - git clone -q ../ site
+    - git checkout $FFHL_GLUON_VERSION
+    - git clone  ../ site
     - make update
   artifacts:
     when: always
@@ -59,7 +59,6 @@ ar71xx-generic:
   <<: *build
 
 ar71xx-tiny:
-  allow_failure: true
   variables:
     GLUON_TARGET: ar71xx-tiny
   <<: *build
