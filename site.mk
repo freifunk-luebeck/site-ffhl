@@ -5,12 +5,10 @@ GLUON_FEATURES := \
 	ebtables-filter-multicast \
 	ebtables-filter-ra-dhcp \
 	ebtables-source-filter \
-	mesh-batman-adv-14 \
 	mesh-batman-adv-15 \
 	mesh-vpn-fastd \
 	radvd \
 	respondd \
-	scheduled-domain-switch \
 	status-page \
 	web-advanced \
 	web-mesh-vpn-fastd \
