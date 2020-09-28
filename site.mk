@@ -5,12 +5,10 @@ GLUON_FEATURES := \
 	ebtables-filter-multicast \
 	ebtables-filter-ra-dhcp \
 	ebtables-source-filter \
-	mesh-batman-adv-14 \
 	mesh-batman-adv-15 \
 	mesh-vpn-fastd \
 	radvd \
 	respondd \
-	scheduled-domain-switch \
 	status-page \
 	web-advanced \
 	web-mesh-vpn-fastd \
@@ -23,7 +21,7 @@ GLUON_SITE_PACKAGES := \
 	respondd-module-airtime
 
 
-DEFAULT_GLUON_RELEASE := 0.16~exp$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := 0.17~exp$(shell date '+%Y%m%d')
 
 # Allow overriding the release number from the command line
 GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
