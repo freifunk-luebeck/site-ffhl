@@ -35,7 +35,7 @@ init:
     - cd gluon
     - git checkout $FFHL_GLUON_VERSION
     - git clone  ../ site
-    - make update
+    # - make update
   artifacts:
     when: always
     paths:
@@ -105,7 +105,15 @@ build_${target}:
     - env | grep -i GLUON
     - cd gluon
   #  - (make -j 1 V=s 2>&1) > log_gluon || { tail -n 100 log_gluon; exit 1; }
-    - (make -j \$(nproc) V=s 2>&1) > log_gluon || { tail -n 100 log_gluon; exit 1; }
+  #  - (make -j \$(nproc) V=s 2>&1) > log_gluon || { tail -n 100 log_gluon; exit 1; }
+    - echo "build build build..."
+    - sleep 30
+    - mkdir -p output/images/sysupgrade/
+    - mkdir -p output/images/factory/
+    - mkdir -p output/images/other/
+    - touch output/images/sysupgrade/foorouter.bin
+    - touch output/images/factory/foorouter.bin
+    - touch output/images/other/foorouter.bin
   cache:
     key: ${CI_JOB_NAME}_\${CI_COMMIT_BRANCH}
     paths:
@@ -115,7 +123,7 @@ build_${target}:
     - gitlab-ci
   artifacts:
     paths:
-    - gluon/output/images
+    - gluon
 
 # UPLOAD RESULTS OF ${target}
 upload_${target}:
@@ -131,8 +139,10 @@ upload_${target}:
     - eval \$(ssh-agent -s)
     - echo "\$DEPLOY_KEY" | ssh-add -
     - cd gluon
-    - make manifest GLUON_BRANCH=beta GLUON_PRIORITY=0
-    - make manifest GLUON_BRANCH=stable GLUON_PRIORITY=7
+    # - make manifest GLUON_BRANCH=beta GLUON_PRIORITY=0
+    # - make manifest GLUON_BRANCH=stable GLUON_PRIORITY=7
+    - touch output/images/sysupgrade/beta.manifest
+    - touch output/images/sysupgrade/stable.manifest
     # - mkdir -p ../public/${CI_COMMIT_REF_SLUG}
     # - cp -rv output/images/ ../public/${CI_COMMIT_REF_SLUG}
     - mv output $UPLOADTAG
@@ -140,10 +150,6 @@ upload_${target}:
     - ln -s ./$UPLOADTAG ./latest
     - rsync -rvhl ./$UPLOADTAG \${DEPLOY_USER}@\${DEPLOY_HOST}:data/
     - rsync -rvhl ./latest \${DEPLOY_USER}@\${DEPLOY_HOST}:data/
-
-
-
-
 EOF
 
 done
