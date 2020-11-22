@@ -39,7 +39,7 @@ build_firmware:
     - cd gluon
     - git checkout $FFHL_GLUON_VERSION
     - git clone  ../ site
-    - (../build-images.sh 2>&1) > build_log || { tail -n 1000 log_gluon; exit 1; }
+    - (../build-images.sh 2>&1) > build_log || { tail -n 1000 build_log; exit 1; }
   artifacts:
     when: always
     paths:
