@@ -16,7 +16,6 @@ GLUON_FEATURES := \
 	web-wizard
 
 GLUON_SITE_PACKAGES := \
-	haveged \
 	iwinfo \
 	respondd-module-airtime
 
@@ -31,8 +30,8 @@ GLUON_PRIORITY ?= 0
 GLUON_REGION ?= eu
 GLUON_LANGS ?= en de
 
-GLUON_WLAN_MESH=11s
-
 GLUON_MULTIDOMAIN=1
 
 GLUON_DEPRECATED?=full
+
+GLUON_BRANCH?=stable
