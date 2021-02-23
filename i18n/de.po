@@ -43,3 +43,13 @@ msgstr ""
 "Betrieb für drei Sekunden den Reset-Button. Das Gerät wird dann im Config "
 "Mode neustarten.</p>"
 "<p>Viel Spaß mit deinem Knoten und der Erkundung von Freifunk!</p>"
+
+
+msgid "gluon-config-mode:domain-select"
+msgstr ""
+"Du kannst hier eine Konfigrationvariante auswählen. "
+"Wenn du dir nicht sicher bist, was das ist, wähle 'Defaul domain' aus"
+
+msgid "gluon-config-mode:domain"
+msgstr ""
+"Konfigurationsvariante"

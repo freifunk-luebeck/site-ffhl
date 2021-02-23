@@ -2,6 +2,7 @@ GLUON_FEATURES := \
 	alfred \
 	autoupdater \
 	config-mode-geo-location-osm \
+	config-mode-domain-select \
 	ebtables-filter-multicast \
 	ebtables-filter-ra-dhcp \
 	ebtables-source-filter \
@@ -20,7 +21,7 @@ GLUON_SITE_PACKAGES := \
 	respondd-module-airtime
 
 
-DEFAULT_GLUON_RELEASE := 0.14.1~exp$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := exp-$(shell date '+%Y%m%d')
 
 # Allow overriding the release number from the command line
 GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
