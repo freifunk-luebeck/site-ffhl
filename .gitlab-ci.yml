@@ -39,7 +39,7 @@ build_latest:
     - cd gluon
     - git checkout $(git tag | sort -h | tail -n 1)
     - git clone  ../ site
-    - (../build-images.sh 2>&1) > build_log || { tail -n 1000 build_log; exit 1; }
+    - (../ci-build-images.sh 2>&1) > build_log || { tail -n 1000 build_log; exit 1; }
   artifacts:
     when: always
     paths:
