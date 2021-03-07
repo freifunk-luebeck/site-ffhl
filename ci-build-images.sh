@@ -2,8 +2,12 @@
 set -e
 
 
-# FLAGS="-j $(nproc)"
-FLAGS="-j 1 V=sc"
+export GLUON_BRANCH=stable
+export GLUON_AUTOUPDATER_ENABLED=1
+export FORCE_UNSAFE_CONFIGURE=1
+
+FLAGS="-j $(nproc)"
+# FLAGS="-j 1 V=sc"
 
 make update
 
