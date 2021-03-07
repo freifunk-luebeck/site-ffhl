@@ -2,8 +2,8 @@
 set -e
 
 
-FLAGS="-j $(nproc)"
-# FLAGS="-j 1 V=sc"
+# FLAGS="-j $(nproc)"
+FLAGS="-j 1 V=sc"
 
 make update
 
