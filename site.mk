@@ -1,12 +1,12 @@
 GLUON_FEATURES := \
-	alfred \
 	autoupdater \
 	config-mode-geo-location-osm \
+	config-mode-domain-select \
 	ebtables-filter-multicast \
 	ebtables-filter-ra-dhcp \
 	ebtables-source-filter \
 	mesh-batman-adv-15 \
-	mesh-vpn-fastd \
+	mesh-vpn-wireguard-vxlan \
 	radvd \
 	respondd \
 	status-page \
@@ -20,7 +20,7 @@ GLUON_SITE_PACKAGES := \
 	respondd-module-airtime
 
 
-DEFAULT_GLUON_RELEASE := 0.17~exp$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := 0.18~exp$(shell date '+%Y%m%d')
 
 # Allow overriding the release number from the command line
 GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
