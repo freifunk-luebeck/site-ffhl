@@ -7,7 +7,7 @@ build-all:
   before_script:
   - apt-get update > /dev/null
   - apt-get install -y curl git libncurses-dev build-essential make gawk unzip wget
-    python2.7 file tar bzip2 > /dev/null
+    python2.7 file tar bzip2 tree > /dev/null
   parallel:
     matrix:
     - TARGET:
@@ -30,12 +30,15 @@ build-all:
       - sunxi-cortexa7
       - x86-generic
       - x86-geode
+      - x86-legacy
       - x86-64
   script:
-  - git clone -q https://github.com/freifunk-gluon/gluon.git
-  - cd gluon
-  - git clone  ../ site
-  - ./site/ci-build-images.sh
+  - tree -L 3
+  - GLUON_TARGET=$TARGET ./scripts/build-images.sh
+  cache:
+    paths:
+    - gluon/tmp
+    - gluon/packages
   artifacts:
     when: always
     paths:

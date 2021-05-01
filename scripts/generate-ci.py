@@ -12,7 +12,7 @@ def get_available_targets():
 
 BEFORE_SCRIPT = [
 	"apt-get update > /dev/null",
-	"apt-get install -y curl git libncurses-dev build-essential make gawk unzip wget python2.7 file tar bzip2 > /dev/null",
+	"apt-get install -y curl git libncurses-dev build-essential make gawk unzip wget python2.7 file tar bzip2 tree > /dev/null",
 ]
 
 ci = {
@@ -23,6 +23,7 @@ ci = {
 	],
 	"build-all": {
 		"stage": "build",
+		# "tags": ["tars"],
 		# "variables": {
 		# 	""
 		# },
@@ -33,8 +34,16 @@ ci = {
 			]
 		},
 		"script": [
-			"GLUON_TARGET=$TARGET ./site/ci-build-images.sh",
+			"tree -L 3",
+			"GLUON_TARGET=$TARGET ./scripts/build-images.sh",
 		],
+		"cache": {
+			"paths": [
+				# "gluon/openwrt",
+				"gluon/tmp",
+				"gluon/packages"
+			],
+		},
 		"artifacts": {
 			"when": "always",
 			"paths": ["gluon/output"]
