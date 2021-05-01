@@ -4,9 +4,10 @@ import yaml
 import subprocess
 import os
 
+MAKE_FLAGS=["--silent", "-C", "gluon", "GLUON_SITEDIR=.."]
 
 def get_available_targets():
-	res = subprocess.run(["make", "list-targets"], stdout=subprocess.PIPE)
+	res = subprocess.run(["make", *MAKE_FLAGS, "list-targets"], stdout=subprocess.PIPE)
 	return res.stdout.decode('utf-8').strip().split("\n")
 
 BEFORE_SCRIPT = [
@@ -22,6 +23,9 @@ ci = {
 	],
 	"build-all": {
 		"stage": "build",
+		# "variables": {
+		# 	""
+		# },
 		"before_script": BEFORE_SCRIPT,
 		"parallel": {
 			"matrix": [
@@ -29,10 +33,7 @@ ci = {
 			]
 		},
 		"script": [
-			"git clone -q https://github.com/freifunk-gluon/gluon.git",
-			"cd gluon",
-			"git clone  ../ site",
-			"./site/ci-build-images.sh",
+			"GLUON_TARGET=$TARGET ./site/ci-build-images.sh",
 		],
 		"artifacts": {
 			"when": "always",

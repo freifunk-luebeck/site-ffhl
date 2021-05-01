@@ -1,27 +1,27 @@
 #!/bin/bash
 set -e
 
-export GLUON_RELEASE="0.14.1~exp$(date '+%Y%m%d')"
-export GLUON_BRANCH=stable
-export GLUON_AUTOUPDATER_ENABLED=1
+# export GLUON_RELEASE="0.14.1~exp$(date '+%Y%m%d')"
+export GLUON_SITEDIR=..
 export FORCE_UNSAFE_CONFIGURE=1
 
-GLUON_VERSION=$(cat site/gluon)
-TARGETS=$(make list-targets)
+if [ -z "$GLUON_TARGET" ]; then
+	TARGETS=$(make --silent -C gluon list-targets)
+else
+	TARGETS="$GLUON_TARGET"
+fi
 
 
-git checkout $GLUON_VERSION
+# FLAGS="-j 1 V=sc"
+# FLAGS="-j $(($(nproc) - 2))"
+FLAGS="-j $(nproc)"
 
-make update
-
-FLAGS="-j 1 V=sc"
-#FLAGS="-j $(($(nproc) - 2))"
-
+make -C gluon update
 
 for target in $TARGETS; do
 	echo $FLAGS GLUON_TARGET=$target
 	#make $FLAGS GLUON_TARGET=$target clean
-	make $FLAGS GLUON_TARGET=$target
+	make -C gluon $FLAGS GLUON_TARGET="$target"
 done
 
 exit
