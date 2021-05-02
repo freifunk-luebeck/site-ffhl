@@ -1,7 +1,13 @@
 image: debian:stable
+default:
+  interruptible: true
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
 stages:
 - build
+- test
 - deploy
+- upload
 build-all:
   stage: build
   before_script:
@@ -36,29 +42,78 @@ build-all:
   - tree -L 3
   - GLUON_TARGET=$TARGET ./scripts/build-images.sh
   cache:
-    paths:
-    - gluon/tmp
-    - gluon/packages
+    paths: []
   artifacts:
     when: always
     paths:
     - gluon/output
-upload:
+test:images:
+  stage: test
+  needs:
+  - build-all
+  before_script:
+  - apt update
+  - apt install -qq -y tree
+  script:
+  - ls gluon/output/images/sysupgrade/ | grep wdr3600
+  - ls gluon/output/images/sysupgrade/ | grep wr841
+  - ls gluon/output/images/sysupgrade/ | grep ubiquiti-unifi
+  - ls gluon/output/images/sysupgrade/ | grep nanostation-m2
+  - ls gluon/output/images/sysupgrade/ | grep wr1043n
+  - ls gluon/output/images/sysupgrade/ | grep wdr4300
+  artifacts:
+    when: always
+    paths:
+    - gluon/output
+test:image-count:
+  stage: test
+  needs:
+  - build-all
+  before_script:
+  - apt update
+  - apt install -qq -y tree
+  script:
+  - N=$(ls gluon/output/images/sysupgrade/ | wc -l)
+  - '[ $N -ge 260 ]'
+  artifacts:
+    when: always
+    paths:
+    - gluon/output
+manifest:
   stage: deploy
+  needs:
+  - build-all
+  before_script:
+  - apt update
+  - apt install -y ecdsautils curl git libncurses-dev build-essential make gawk unzip
+    wget python2.7 file tar bzip2 tree
+  script:
+  - make -C gluon GLUON_SITEDIR=.. update
+  - make -C gluon GLUON_SITEDIR=.. manifest GLUON_BRANCH=experimental
+  - make -C gluon GLUON_SITEDIR=.. manifest GLUON_BRANCH=beta
+  - make -C gluon GLUON_SITEDIR=.. manifest GLUON_BRANCH=stable
+  - $SIGNING_KEY > ecdsa.key
+  - ./gluon/contrib/sign.sh ecdsa.key gluon/output/images/sysupgrade/experimental.manifest
+  artifacts:
+    when: always
+    paths:
+    - gluon/output
+deploy:
+  stage: upload
   before_script:
   - apt-get -qq update
-  - apt-get -qq install -y git make gawk wget python2.7 file tar bzip2 rsync
-  script:
+  - apt-get -qq install -y git make gawk wget python2.7 file tar bzip2 rsync tree
   - mkdir -p ~/.ssh
   - echo -e "StrictHostKeyChecking no" > ~/.ssh/config
   - eval $(ssh-agent -s)
   - echo "$DEPLOY_KEY" | ssh-add -
+  script:
+  - tree -L 3 gluon/output
   - DATE=$(date +%F-%H-%M-%S)
   - mkdir -p "public/$DATE"
   - cd gluon
   - mv output $DATE
-  - ln -s "./$DATE" ./latest
-  - find "$DATE" -maxdepth 2
-  - rsync -rvhl "./$DATE" "${DEPLOY_USER}@${DEPLOY_HOST}:data/"
-  - rsync -rvhl ./latest "${DEPLOY_USER}@${DEPLOY_HOST}:data/"
+  - ln -s ./$DATE ./latest
+  - rsync -rvhl ./$DATE ${DEPLOY_USER}@${DEPLOY_HOST}:data/
+  - rsync -rvhl ./latest ${DEPLOY_USER}@${DEPLOY_HOST}:data/
 

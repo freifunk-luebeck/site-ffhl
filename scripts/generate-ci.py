@@ -17,9 +17,17 @@ BEFORE_SCRIPT = [
 
 ci = {
 	"image": "debian:stable",
+	"default": {
+		"interruptible": True
+	},
+	"variables": {
+		"GIT_SUBMODULE_STRATEGY": "recursive",
+	},
 	"stages": [
 		"build",
-		"deploy"
+		"test",
+		"deploy",
+		"upload",
 	],
 	"build-all": {
 		"stage": "build",
@@ -40,40 +48,105 @@ ci = {
 		"cache": {
 			"paths": [
 				# "gluon/openwrt",
-				"gluon/tmp",
-				"gluon/packages"
+				# "gluon/tmp",
+				# "gluon/packages"
 			],
 		},
 		"artifacts": {
 			"when": "always",
 			"paths": ["gluon/output"]
 		}
-
 	}
 }
 
-deploy = yaml.full_load("""\
-stage: deploy
-before_script:
-- apt-get -qq update
-- apt-get -qq install -y git make gawk wget python2.7 file tar bzip2 rsync
-script:
-- mkdir -p ~/.ssh
-- 'echo -e "StrictHostKeyChecking no" > ~/.ssh/config'
-- eval $(ssh-agent -s)
-- echo "$DEPLOY_KEY" | ssh-add -
-- DATE=$(date +%F-%H-%M-%S)
-- mkdir -p "public/$DATE"
-- cd gluon
-- mv output $DATE
-- ln -s "./$DATE" ./latest
-- find "$DATE" -maxdepth 2
-- rsync -rvhl "./$DATE" "${DEPLOY_USER}@${DEPLOY_HOST}:data/"
-- rsync -rvhl ./latest "${DEPLOY_USER}@${DEPLOY_HOST}:data/"
-"""
-)
 
-ci['upload'] = deploy
+ci['test:images'] = {
+	"stage": "test",
+	"needs": ["build-all"],
+	"before_script": [
+		"apt update",
+		"apt install -qq -y tree"
+	],
+	"script": [
+		# these are the most used devices in luebeck
+		"ls gluon/output/images/sysupgrade/ | grep wdr3600",
+		"ls gluon/output/images/sysupgrade/ | grep wr841",
+		"ls gluon/output/images/sysupgrade/ | grep ubiquiti-unifi",
+		"ls gluon/output/images/sysupgrade/ | grep nanostation-m2",
+		"ls gluon/output/images/sysupgrade/ | grep wr1043n",
+		"ls gluon/output/images/sysupgrade/ | grep wdr4300",
+	],
+	"artifacts": {
+		"when": "always",
+		"paths": ["gluon/output"]
+	}
+}
+
+ci['test:image-count'] = {
+	"stage": "test",
+	"needs": ["build-all"],
+	"before_script": [
+		"apt update",
+		"apt install -qq -y tree"
+	],
+	"script": [
+		# check the number of images
+		"N=$(ls gluon/output/images/sysupgrade/ | wc -l)",
+		"[ $N -ge 260 ]"
+	],
+	"artifacts": {
+		"when": "always",
+		"paths": ["gluon/output"]
+	}
+}
+
+
+
+ci['manifest'] = {
+	"stage": "deploy",
+	"needs": ["build-all"],
+	"before_script": [
+		"apt update",
+		"apt install -y ecdsautils curl git libncurses-dev build-essential make gawk unzip wget python2.7 file tar bzip2 tree"
+	],
+	"script": [
+		"make -C gluon GLUON_SITEDIR=.. update",
+		"make -C gluon GLUON_SITEDIR=.. manifest GLUON_BRANCH=experimental",
+		"make -C gluon GLUON_SITEDIR=.. manifest GLUON_BRANCH=beta",
+		"make -C gluon GLUON_SITEDIR=.. manifest GLUON_BRANCH=stable",
+		"$SIGNING_KEY > ecdsa.key",
+		"./gluon/contrib/sign.sh ecdsa.key gluon/output/images/sysupgrade/experimental.manifest",
+	],
+	"artifacts": {
+		"when": "always",
+		"paths": ["gluon/output"]
+	}
+}
+
+
+ci['deploy'] = {
+	"stage": "upload",
+	"before_script": [
+		"apt-get -qq update",
+		"apt-get -qq install -y git make gawk wget python2.7 file tar bzip2 rsync tree",
+		"mkdir -p ~/.ssh",
+		'echo -e "StrictHostKeyChecking no" > ~/.ssh/config',
+		"eval $(ssh-agent -s)",
+		'echo "$DEPLOY_KEY" | ssh-add -',
+	],
+	"script": [
+		"tree -L 3 gluon/output",
+		"DATE=$(date +%F-%H-%M-%S)",
+		'mkdir -p "public/$DATE"',
+		"cd gluon",
+		"mv output $DATE",
+		'ln -s ./$DATE ./latest',
+		'rsync -rvhl ./$DATE ${DEPLOY_USER}@${DEPLOY_HOST}:data/',
+		'rsync -rvhl ./latest ${DEPLOY_USER}@${DEPLOY_HOST}:data/',
+	]
+}
+
+
 
 print(yaml.dump(ci, sort_keys=False))
 # print(get_available_targets())

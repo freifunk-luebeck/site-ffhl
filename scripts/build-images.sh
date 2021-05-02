@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 # export GLUON_RELEASE="0.14.1~exp$(date '+%Y%m%d')"
 export GLUON_SITEDIR=..
@@ -13,8 +13,8 @@ fi
 
 
 # FLAGS="-j 1 V=sc"
-# FLAGS="-j $(($(nproc) - 2))"
-FLAGS="-j $(nproc)"
+FLAGS="-j $(($(nproc) / 2))"
+# FLAGS="-j $(nproc)"
 
 make -C gluon update
 
