@@ -1,4 +1,4 @@
-image: debian:stable
+image: cuechan/gluon-build:latest
 default:
   interruptible: true
 variables:
@@ -12,8 +12,7 @@ build-all:
   stage: build
   before_script:
   - apt-get update > /dev/null
-  - apt-get install -y curl git libncurses-dev build-essential make gawk unzip wget
-    python2.7 file tar bzip2 tree > /dev/null
+  - apt-get install -y curl git tree > /dev/null
   parallel:
     matrix:
     - TARGET:
@@ -83,16 +82,18 @@ manifest:
   stage: deploy
   needs:
   - build-all
+  variables:
+    FORCE_UNSAFE_CONFIGURE: '1'
   before_script:
   - apt update
   - apt install -y ecdsautils curl git libncurses-dev build-essential make gawk unzip
     wget python2.7 file tar bzip2 tree
   script:
   - make -C gluon GLUON_SITEDIR=.. update
-  - make -C gluon GLUON_SITEDIR=.. manifest GLUON_BRANCH=experimental
-  - make -C gluon GLUON_SITEDIR=.. manifest GLUON_BRANCH=beta
-  - make -C gluon GLUON_SITEDIR=.. manifest GLUON_BRANCH=stable
-  - $SIGNING_KEY > ecdsa.key
+  - make -C gluon GLUON_SITEDIR=.. GLUON_PRIORITY=7 GLUON_BRANCH=stable manifest
+  - make -C gluon GLUON_SITEDIR=.. GLUON_PRIORITY=0 GLUON_BRANCH=beta manifest
+  - make -C gluon GLUON_SITEDIR=.. GLUON_PRIORITY=0 GLUON_BRANCH=experimental manifest
+  - echo $SIGNING_KEY > ecdsa.key
   - ./gluon/contrib/sign.sh ecdsa.key gluon/output/images/sysupgrade/experimental.manifest
   artifacts:
     when: always

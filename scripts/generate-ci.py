@@ -12,11 +12,12 @@ def get_available_targets():
 
 BEFORE_SCRIPT = [
 	"apt-get update > /dev/null",
-	"apt-get install -y curl git libncurses-dev build-essential make gawk unzip wget python2.7 file tar bzip2 tree > /dev/null",
+	# "apt-get install -y curl git libncurses-dev build-essential make gawk unzip wget python2.7 file tar bzip2 tree > /dev/null",
+	"apt-get install -y curl git tree > /dev/null",
 ]
 
 ci = {
-	"image": "debian:stable",
+	"image": "cuechan/gluon-build:latest",
 	"default": {
 		"interruptible": True
 	},
@@ -45,6 +46,16 @@ ci = {
 			"tree -L 3",
 			"GLUON_TARGET=$TARGET ./scripts/build-images.sh",
 		],
+		# "script": [
+		# 	"tree -L 3",
+		# 	"mkdir -p gluon/output/{debug,images,packages}",
+		# 	"mkdir -p gluon/output/images/{factory,other,sysupgrade}",
+		# 	"for i in {0..20}; do touch gluon/output/images/factory/gluon_${i}.bin; done",
+		# 	"for i in {0..30}; do touch gluon/output/images/sysupgrade/gluon_${i}.bin; done",
+		# 	"for i in {0..10}; do touch gluon/output/images/other/gluon_${i}.bin; done",
+		# 	"mkdir -p gluon/output/packages/$TARGET/$TARGET",
+		# 	"for i in {0..10}; do touch gluon/output/packages/$TARGET/$TARGET/package_${i}.bin; done",
+		# ],
 		"cache": {
 			"paths": [
 				# "gluon/openwrt",
@@ -105,16 +116,19 @@ ci['test:image-count'] = {
 ci['manifest'] = {
 	"stage": "deploy",
 	"needs": ["build-all"],
+	"variables": {
+		"FORCE_UNSAFE_CONFIGURE": "1",
+	},
 	"before_script": [
 		"apt update",
 		"apt install -y ecdsautils curl git libncurses-dev build-essential make gawk unzip wget python2.7 file tar bzip2 tree"
 	],
 	"script": [
 		"make -C gluon GLUON_SITEDIR=.. update",
-		"make -C gluon GLUON_SITEDIR=.. manifest GLUON_BRANCH=experimental",
-		"make -C gluon GLUON_SITEDIR=.. manifest GLUON_BRANCH=beta",
-		"make -C gluon GLUON_SITEDIR=.. manifest GLUON_BRANCH=stable",
-		"$SIGNING_KEY > ecdsa.key",
+		"make -C gluon GLUON_SITEDIR=.. GLUON_PRIORITY=7 GLUON_BRANCH=stable manifest",
+		"make -C gluon GLUON_SITEDIR=.. GLUON_PRIORITY=0 GLUON_BRANCH=beta manifest",
+		"make -C gluon GLUON_SITEDIR=.. GLUON_PRIORITY=0 GLUON_BRANCH=experimental manifest",
+		"echo $SIGNING_KEY > ecdsa.key",
 		"./gluon/contrib/sign.sh ecdsa.key gluon/output/images/sysupgrade/experimental.manifest",
 	],
 	"artifacts": {
