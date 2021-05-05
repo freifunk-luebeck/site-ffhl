@@ -140,6 +140,7 @@ ci['manifest'] = {
 
 ci['deploy'] = {
 	"stage": "upload",
+	"needs": ["test:images", "test:image-count", "manifest"],
 	"before_script": [
 		"apt-get -qq update",
 		"apt-get -qq install -y git make gawk wget python2.7 file tar bzip2 rsync tree",
