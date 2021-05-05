@@ -11,9 +11,10 @@ else
 	TARGETS="$GLUON_TARGET"
 fi
 
+THREADS=$((($(nproc)+1) / 2))
 
 # FLAGS="-j 1 V=sc"
-FLAGS="-j $(($(nproc) / 2))"
+FLAGS="-j $THREADS"
 # FLAGS="-j $(nproc)"
 
 make -C gluon update
