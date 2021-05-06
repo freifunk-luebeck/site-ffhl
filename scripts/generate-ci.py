@@ -151,12 +151,12 @@ ci['deploy'] = {
 	],
 	"script": [
 		"tree -L 3 gluon/output",
-		"DATE=$(date +%F-%H-%M-%S)",
-		'mkdir -p "public/$DATE"',
+		"TAG=${CI_COMMIT_BRANCH}_$(date +%F_%H-%M-%S)",
+		'mkdir -p "public/$TAG"',
 		"cd gluon",
-		"mv output $DATE",
-		'ln -s ./$DATE ./latest',
-		'rsync -rvhl ./$DATE ${DEPLOY_USER}@${DEPLOY_HOST}:data/',
+		"mv output $TAG",
+		'ln -s ./$TAG ./latest',
+		'rsync -rvhl ./$TAG ${DEPLOY_USER}@${DEPLOY_HOST}:data/',
 		'rsync -rvhl ./latest ${DEPLOY_USER}@${DEPLOY_HOST}:data/',
 	]
 }
