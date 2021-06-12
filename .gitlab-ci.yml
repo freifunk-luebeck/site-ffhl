@@ -1,0 +1,124 @@
+image: cuechan/gluon-build:latest
+default:
+  interruptible: true
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+stages:
+- build
+- test
+- deploy
+- upload
+build-all:
+  stage: build
+  before_script:
+  - apt-get update > /dev/null
+  - apt-get install -y curl git tree > /dev/null
+  parallel:
+    matrix:
+    - TARGET:
+      - ar71xx-generic
+      - ar71xx-tiny
+      - ar71xx-nand
+      - ath79-generic
+      - brcm2708-bcm2708
+      - brcm2708-bcm2709
+      - ipq40xx-generic
+      - ipq806x-generic
+      - lantiq-xrx200
+      - lantiq-xway
+      - mpc85xx-generic
+      - mpc85xx-p1020
+      - ramips-mt7620
+      - ramips-mt7621
+      - ramips-mt76x8
+      - ramips-rt305x
+      - sunxi-cortexa7
+      - x86-generic
+      - x86-geode
+      - x86-legacy
+      - x86-64
+  script:
+  - tree -L 3
+  - GLUON_TARGET=$TARGET ./scripts/build-images.sh
+  cache:
+    paths: []
+  artifacts:
+    when: always
+    paths:
+    - gluon/output
+test:images:
+  stage: test
+  needs:
+  - build-all
+  before_script:
+  - apt update
+  - apt install -qq -y tree
+  script:
+  - ls gluon/output/images/sysupgrade/ | grep wdr3600
+  - ls gluon/output/images/sysupgrade/ | grep wr841
+  - ls gluon/output/images/sysupgrade/ | grep ubiquiti-unifi
+  - ls gluon/output/images/sysupgrade/ | grep nanostation-m2
+  - ls gluon/output/images/sysupgrade/ | grep wr1043n
+  - ls gluon/output/images/sysupgrade/ | grep wdr4300
+  artifacts:
+    when: always
+    paths:
+    - gluon/output
+test:image-count:
+  stage: test
+  needs:
+  - build-all
+  before_script:
+  - apt update
+  - apt install -qq -y tree
+  script:
+  - N=$(ls gluon/output/images/sysupgrade/ | wc -l)
+  - '[ $N -ge 260 ]'
+  artifacts:
+    when: always
+    paths:
+    - gluon/output
+manifest:
+  stage: deploy
+  needs:
+  - build-all
+  variables:
+    FORCE_UNSAFE_CONFIGURE: '1'
+  before_script:
+  - apt update
+  - apt install -y ecdsautils curl git libncurses-dev build-essential make gawk unzip
+    wget python2.7 file tar bzip2 tree
+  script:
+  - make -C gluon GLUON_SITEDIR=.. update
+  - make -C gluon GLUON_SITEDIR=.. GLUON_PRIORITY=7 GLUON_BRANCH=stable manifest
+  - make -C gluon GLUON_SITEDIR=.. GLUON_PRIORITY=0 GLUON_BRANCH=beta manifest
+  - make -C gluon GLUON_SITEDIR=.. GLUON_PRIORITY=0 GLUON_BRANCH=experimental manifest
+  - echo $SIGNING_KEY > ecdsa.key
+  - ./gluon/contrib/sign.sh ecdsa.key gluon/output/images/sysupgrade/experimental.manifest
+  artifacts:
+    when: always
+    paths:
+    - gluon/output
+deploy:
+  stage: upload
+  needs:
+  - test:images
+  - test:image-count
+  - manifest
+  before_script:
+  - apt-get -qq update
+  - apt-get -qq install -y git make gawk wget python2.7 file tar bzip2 rsync tree
+  - mkdir -p ~/.ssh
+  - echo -e "StrictHostKeyChecking no" > ~/.ssh/config
+  - eval $(ssh-agent -s)
+  - echo "$DEPLOY_KEY" | ssh-add -
+  script:
+  - tree -L 3 gluon/output
+  - TAG=${CI_COMMIT_BRANCH}_$(date +%F_%H-%M-%S)
+  - mkdir -p "public/$TAG"
+  - cd gluon
+  - mv output $TAG
+  - ln -s ./$TAG ./latest
+  - rsync -rvhl ./$TAG ${DEPLOY_USER}@${DEPLOY_HOST}:data/
+  - rsync -rvhl ./latest ${DEPLOY_USER}@${DEPLOY_HOST}:data/
+
