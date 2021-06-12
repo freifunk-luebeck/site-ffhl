@@ -125,9 +125,9 @@ ci['manifest'] = {
 	],
 	"script": [
 		"make -C gluon GLUON_SITEDIR=.. update",
-		"make -C gluon GLUON_SITEDIR=.. GLUON_PRIORITY=7 GLUON_BRANCH=stable manifest",
-		"make -C gluon GLUON_SITEDIR=.. GLUON_PRIORITY=0 GLUON_BRANCH=beta manifest",
-		"make -C gluon GLUON_SITEDIR=.. GLUON_PRIORITY=0 GLUON_BRANCH=experimental manifest",
+		"make -C gluon GLUON_SITEDIR=.. GLUON_PRIORITY=7 GLUON_AUTOUPDATER_BRANCH=stable manifest",
+		"make -C gluon GLUON_SITEDIR=.. GLUON_PRIORITY=0 GLUON_AUTOUPDATER_BRANCH=beta manifest",
+		"make -C gluon GLUON_SITEDIR=.. GLUON_PRIORITY=0 GLUON_AUTOUPDATER_BRANCH=experimental manifest",
 		"echo $SIGNING_KEY > ecdsa.key",
 		"./gluon/contrib/sign.sh ecdsa.key gluon/output/images/sysupgrade/experimental.manifest",
 	],
@@ -163,5 +163,5 @@ ci['deploy'] = {
 
 
 
-print(yaml.dump(ci, sort_keys=False))
+print(yaml.dump(ci, sort_keys=False,))
 # print(get_available_targets())
