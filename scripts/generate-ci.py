@@ -158,5 +158,5 @@ ci['deploy'] = {
 
 
 
-print(yaml.dump(ci, sort_keys=False,))
+print(yaml.dump(ci, sort_keys=False))
 # print(get_available_targets())

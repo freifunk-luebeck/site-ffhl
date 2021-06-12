@@ -27,3 +27,7 @@ for target in $TARGETS; do
 done
 
 exit
+
+make manifest GLUON_BRANCH=experimental GLUON_PRIORITY=0
+make manifest GLUON_BRANCH=beta GLUON_PRIORITY=0
+make manifest GLUON_BRANCH=stable GLUON_PRIORITY=7
