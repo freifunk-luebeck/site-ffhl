@@ -73,6 +73,7 @@ test:image-count:
   - apt install -qq -y tree
   script:
   - N=$(ls gluon/output/images/sysupgrade/ | wc -l)
+  - echo $N
   - '[ $N -ge 260 ]'
   artifacts:
     when: always
