@@ -103,6 +103,7 @@ ci['test:image-count'] = {
 	"script": [
 		# check the number of images
 		"N=$(ls gluon/output/images/sysupgrade/ | wc -l)",
+		"echo $N",
 		"[ $N -ge 260 ]"
 	],
 	"artifacts": {
