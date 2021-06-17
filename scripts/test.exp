@@ -1,0 +1,15 @@
+#!/usr/bin/expect
+
+set timeout 60
+
+#spwan qemu-system-x86_64 -m 512 -hda ./gluon.vdi -nographic -netdev tap,id=net0 -device e1000,netdev=net0 -serial pipe:./gluonvm
+spawn qemu-system-x86_64 -m 512 -hda ../gluon.vdi -nographic -netdev tap,id=net0 -device e1000,netdev=net0
+
+expect "Please press Enter to activate this console."
+sleep 15
+
+send "\n"
+expect "root@"
+
+send "uname -a\n"
+expect "Linux\n"

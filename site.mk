@@ -20,11 +20,13 @@ GLUON_SITE_PACKAGES := \
 	respondd-module-airtime
 
 
-DEFAULT_GLUON_RELEASE := 0.17~exp$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := 0.14.1~exp$(shell date '+%Y%m%d')
 
 # Allow overriding the release number from the command line
 GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
 
+GLUON_AUTOUPDATER_ENABLED = 1
+GLUON_AUTOUPDATER_BRANCH ?= stable
 GLUON_PRIORITY ?= 0
 
 GLUON_REGION ?= eu
