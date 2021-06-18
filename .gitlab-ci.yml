@@ -10,6 +10,8 @@ stages:
 - upload
 build-all:
   stage: build
+  tags:
+  - fast
   before_script:
   - apt-get update > /dev/null
   - apt-get install -y curl git tree > /dev/null
@@ -83,6 +85,8 @@ manifest:
   stage: deploy
   needs:
   - build-all
+  tags:
+  - fast
   variables:
     FORCE_UNSAFE_CONFIGURE: '1'
   before_script:

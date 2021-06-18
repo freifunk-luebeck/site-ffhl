@@ -32,7 +32,7 @@ ci = {
 	],
 	"build-all": {
 		"stage": "build",
-		# "tags": ["tars"],
+		"tags": ["fast"],
 		# "variables": {
 		# 	""
 		# },
@@ -117,6 +117,7 @@ ci['test:image-count'] = {
 ci['manifest'] = {
 	"stage": "deploy",
 	"needs": ["build-all"],
+	"tags": ["fast"],
 	"variables": {
 		"FORCE_UNSAFE_CONFIGURE": "1",
 	},
