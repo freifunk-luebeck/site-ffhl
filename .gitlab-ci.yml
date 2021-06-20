@@ -3,6 +3,7 @@ default:
   interruptible: true
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
+  FORCE_UNSAFE_CONFIGURE: '1'
 stages:
 - build
 - test
@@ -12,6 +13,12 @@ build-all:
   stage: build
   tags:
   - fast
+  variables:
+    GLUON_SITEDIR: ..
+    GLUON_DEPRECATED: 1
+    GLUON_AUTOUPDATER_ENABLED: 1
+    GLUON_AUTOUPDATER_BRANCH: stable
+    GLUON_BRANCH: $GLUON_AUTOUPDATER_BRANCH
   before_script:
   - apt-get update > /dev/null
   - apt-get install -y curl git tree > /dev/null
@@ -41,9 +48,8 @@ build-all:
       - x86-64
   script:
   - tree -L 3
-  - GLUON_TARGET=$TARGET ./scripts/build-images.sh
-  cache:
-    paths: []
+  - make -C gluon update
+  - 'make -C gluon -j $((($(nproc)+1) / 2)) GLUON_TARGET=$TARGET '
   artifacts:
     when: always
     paths:
