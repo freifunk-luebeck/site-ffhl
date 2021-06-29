@@ -53,6 +53,7 @@ ci['build-all'] = {
 	},
 	"script": [
 		"tree -L 3",
+		"env | grep CI",
 		"make -C gluon update",
 		"make -C gluon -j $((($(nproc)+1) / 2)) GLUON_TARGET=$TARGET ",
 	],
