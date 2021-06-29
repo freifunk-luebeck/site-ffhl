@@ -25,6 +25,8 @@ DEFAULT_GLUON_RELEASE := 0.14.1~exp$(shell date '+%Y%m%d')
 
 # Allow overriding the release number from the command line
 GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
+# gitlab-ci: use commit tag, if avalable as version number
+GLUON_RELEASE ?= $(CI_COMMIT_TAG)
 
 GLUON_AUTOUPDATER_ENABLED = 1
 GLUON_AUTOUPDATER_BRANCH ?= stable
