@@ -3,6 +3,7 @@ default:
   interruptible: true
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
+  FORCE_UNSAFE_CONFIGURE: '1'
 stages:
 - build
 - test
@@ -10,6 +11,14 @@ stages:
 - upload
 build-all:
   stage: build
+  tags:
+  - fast
+  variables:
+    GLUON_SITEDIR: ..
+    GLUON_DEPRECATED: 1
+    GLUON_AUTOUPDATER_ENABLED: 1
+    GLUON_AUTOUPDATER_BRANCH: stable
+    GLUON_BRANCH: $GLUON_AUTOUPDATER_BRANCH
   before_script:
   - apt-get update > /dev/null
   - apt-get install -y curl git tree > /dev/null
@@ -39,9 +48,9 @@ build-all:
       - x86-64
   script:
   - tree -L 3
-  - GLUON_TARGET=$TARGET ./scripts/build-images.sh
-  cache:
-    paths: []
+  - env | grep CI
+  - make -C gluon update
+  - 'make -C gluon -j $((($(nproc)+1) / 2)) GLUON_TARGET=$TARGET '
   artifacts:
     when: always
     paths:
@@ -83,6 +92,8 @@ manifest:
   stage: deploy
   needs:
   - build-all
+  tags:
+  - fast
   variables:
     FORCE_UNSAFE_CONFIGURE: '1'
   before_script:
@@ -92,11 +103,11 @@ manifest:
   script:
   - make -C gluon GLUON_SITEDIR=.. update
   - make -C gluon GLUON_SITEDIR=.. GLUON_PRIORITY=7 GLUON_AUTOUPDATER_BRANCH=stable
-    manifest
+    GLUON_BRANCH=stable manifest
   - make -C gluon GLUON_SITEDIR=.. GLUON_PRIORITY=0 GLUON_AUTOUPDATER_BRANCH=beta
-    manifest
+    GLUON_BRANCH=beta manifest
   - make -C gluon GLUON_SITEDIR=.. GLUON_PRIORITY=0 GLUON_AUTOUPDATER_BRANCH=experimental
-    manifest
+    GLUON_BRANCH=experimental manifest
   - echo $SIGNING_KEY > ecdsa.key
   - ./gluon/contrib/sign.sh ecdsa.key gluon/output/images/sysupgrade/experimental.manifest
   artifacts:

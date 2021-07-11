@@ -7,6 +7,7 @@ GLUON_FEATURES := \
 	ebtables-source-filter \
 	mesh-batman-adv-15 \
 	mesh-vpn-fastd \
+	scheduled-domain-switch \
 	radvd \
 	respondd \
 	status-page \
@@ -21,6 +22,9 @@ GLUON_SITE_PACKAGES := \
 
 
 DEFAULT_GLUON_RELEASE := 0.14.1~exp$(shell date '+%Y%m%d')
+
+# gitlab-ci: use commit tag, if avalable as version number
+GLUON_RELEASE ?= $(CI_COMMIT_TAG)
 
 # Allow overriding the release number from the command line
 GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
