@@ -7,7 +7,7 @@ GLUON_FEATURES := \
 	ebtables-source-filter \
 	mesh-batman-adv-15 \
 	mesh-vpn-fastd \
-	scheduled-domain-switch \
+	wireless-encryption-wpa3 \
 	radvd \
 	respondd \
 	status-page \
