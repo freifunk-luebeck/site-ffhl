@@ -7,7 +7,6 @@ GLUON_FEATURES := \
 	ebtables-source-filter \
 	mesh-batman-adv-15 \
 	mesh-vpn-fastd \
-	wireless-encryption-wpa3 \
 	radvd \
 	respondd \
 	status-page \
@@ -15,6 +14,8 @@ GLUON_FEATURES := \
 	web-mesh-vpn-fastd \
 	web-private-wifi \
 	web-wizard
+
+GLUON_FEATURES_standard := wireless-encryption-wpa3
 
 GLUON_SITE_PACKAGES := \
 	iwinfo \
