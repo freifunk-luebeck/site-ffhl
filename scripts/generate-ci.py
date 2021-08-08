@@ -69,6 +69,7 @@ ci['build-all'] = {
 	],
 	"artifacts": {
 		"when": "always",
+		"expire_in": "1 day",
 		"paths": ["gluon/output"]
 	}
 }

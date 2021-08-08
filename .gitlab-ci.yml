@@ -64,6 +64,7 @@ build-all:
   - ccache --print-stats
   artifacts:
     when: always
+    expire_in: 1 day
     paths:
     - gluon/output
 test:images:
