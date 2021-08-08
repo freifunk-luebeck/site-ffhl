@@ -14,7 +14,7 @@ BEFORE_SCRIPT = [
 	"apt-get update > /dev/null",
 	# "apt-get install -y curl git libncurses-dev build-essential make gawk unzip wget python2.7 file tar bzip2 tree > /dev/null",
 	"apt-get install -y curl git tree ccache > /dev/null",
-	"mkdir ccache",
+	"mkdir -p ccache",
 ]
 
 VARIABLES = {

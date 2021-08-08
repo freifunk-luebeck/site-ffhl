@@ -18,7 +18,7 @@ build-all:
   before_script:
   - apt-get update > /dev/null
   - apt-get install -y curl git tree ccache > /dev/null
-  - mkdir ccache
+  - mkdir -p ccache
   cache:
     paths:
     - ccache
