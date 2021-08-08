@@ -57,43 +57,9 @@ ci['build-all'] = {
 		"make -C gluon update",
 		"make -C gluon -j $((($(nproc)+1) / 2)) GLUON_TARGET=$TARGET ",
 	],
-	"build-all": {
-		"stage": "build",
-		"tags": ["fast"],
-		# "variables": {
-		# 	""
-		# },
-		"before_script": BEFORE_SCRIPT,
-		"parallel": {
-			"matrix": [
-				{"TARGET": get_available_targets()}
-			]
-		},
-		"script": [
-			"tree -L 3",
-			"GLUON_TARGET=$TARGET ./scripts/build-images.sh",
-		],
-		# "script": [
-		# 	"tree -L 3",
-		# 	"mkdir -p gluon/output/{debug,images,packages}",
-		# 	"mkdir -p gluon/output/images/{factory,other,sysupgrade}",
-		# 	"for i in {0..20}; do touch gluon/output/images/factory/gluon_${i}.bin; done",
-		# 	"for i in {0..30}; do touch gluon/output/images/sysupgrade/gluon_${i}.bin; done",
-		# 	"for i in {0..10}; do touch gluon/output/images/other/gluon_${i}.bin; done",
-		# 	"mkdir -p gluon/output/packages/$TARGET/$TARGET",
-		# 	"for i in {0..10}; do touch gluon/output/packages/$TARGET/$TARGET/package_${i}.bin; done",
-		# ],
-		"cache": {
-			"paths": [
-				# "gluon/openwrt",
-				# "gluon/tmp",
-				# "gluon/packages"
-			],
-		},
-		"artifacts": {
-			"when": "always",
-			"paths": ["gluon/output"]
-		}
+	"artifacts": {
+		"when": "always",
+		"paths": ["gluon/output"]
 	}
 }
 
