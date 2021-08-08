@@ -13,10 +13,14 @@ def get_available_targets():
 BEFORE_SCRIPT = [
 	"apt-get update > /dev/null",
 	# "apt-get install -y curl git libncurses-dev build-essential make gawk unzip wget python2.7 file tar bzip2 tree > /dev/null",
-	"apt-get install -y curl git tree > /dev/null",
+	"apt-get install -y curl git tree ccache > /dev/null",
+	"mkdir ccache",
 ]
 
-VARIABLES = {}
+VARIABLES = {
+	"CCACHE_DIR": "$CI_PROJECT_DIR/ccache",
+	"CCACHE_MAXSIZE": "20G"
+}
 
 ci = {
 	"image": "cuechan/gluon-build:latest",
@@ -26,6 +30,7 @@ ci = {
 	"variables": {
 		"GIT_SUBMODULE_STRATEGY": "recursive",
 		"FORCE_UNSAFE_CONFIGURE": "1",
+		**VARIABLES,
 	},
 	"stages": [
 		"build",
@@ -38,24 +43,29 @@ ci = {
 ci['build-all'] = {
 	"stage": "build",
 	"tags": ["fast"],
+	"before_script": BEFORE_SCRIPT,
+	"cache": {"path": ['ccache']},
+	"parallel": {
+		"matrix": [
+			{"TARGET": get_available_targets()}
+		]
+	},
 	"variables": {
 		"GLUON_SITEDIR": "..",
 		"GLUON_DEPRECATED": 1,
 		"GLUON_AUTOUPDATER_ENABLED": 1,
 		"GLUON_AUTOUPDATER_BRANCH": "stable",
 		"GLUON_BRANCH": "$GLUON_AUTOUPDATER_BRANCH",
-	},
-	"before_script": BEFORE_SCRIPT,
-	"parallel": {
-		"matrix": [
-			{"TARGET": get_available_targets()}
-		]
+		**VARIABLES,
 	},
 	"script": [
+		'PATH="$PATH:/usr/lib/ccache',
+		"file $(which gcc)",
 		"tree -L 3",
 		"env | grep CI",
 		"make -C gluon update",
 		"make -C gluon -j $((($(nproc)+1) / 2)) GLUON_TARGET=$TARGET ",
+		"ccache --print-stats"
 	],
 	"artifacts": {
 		"when": "always",
@@ -67,6 +77,7 @@ ci['build-all'] = {
 ci['test:images'] = {
 	"stage": "test",
 	"needs": ["build-all"],
+	"allow_failure": True,
 	"before_script": [
 		"apt update",
 		"apt install -qq -y tree"
@@ -89,6 +100,7 @@ ci['test:images'] = {
 ci['test:image-count'] = {
 	"stage": "test",
 	"needs": ["build-all"],
+	"allow_failure": True,
 	"before_script": [
 		"apt update",
 		"apt install -qq -y tree"
