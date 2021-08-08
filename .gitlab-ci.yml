@@ -20,7 +20,7 @@ build-all:
   - apt-get install -y curl git tree ccache > /dev/null
   - mkdir ccache
   cache:
-    path:
+    paths:
     - ccache
   parallel:
     matrix:

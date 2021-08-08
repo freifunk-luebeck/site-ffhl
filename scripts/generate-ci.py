@@ -44,7 +44,7 @@ ci['build-all'] = {
 	"stage": "build",
 	"tags": ["fast"],
 	"before_script": BEFORE_SCRIPT,
-	"cache": {"path": ['ccache']},
+	"cache": {"paths": ['ccache']},
 	"parallel": {
 		"matrix": [
 			{"TARGET": get_available_targets()}
