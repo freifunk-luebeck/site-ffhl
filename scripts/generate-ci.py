@@ -65,7 +65,7 @@ ci['build-all'] = {
 		"env | grep CI",
 		"make -C gluon update",
 		"make -C gluon -j $((($(nproc)+1) / 2)) GLUON_TARGET=$TARGET ",
-		"ccache --print-stats"
+		"ccache -s"
 	],
 	"artifacts": {
 		"when": "always",
