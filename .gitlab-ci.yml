@@ -55,7 +55,7 @@ build-all:
     CCACHE_DIR: $CI_PROJECT_DIR/ccache
     CCACHE_MAXSIZE: 20G
   script:
-  - PATH="$PATH:/usr/lib/ccache
+  - PATH="$PATH:/usr/lib/ccache"
   - file $(which gcc)
   - tree -L 3
   - env | grep CI

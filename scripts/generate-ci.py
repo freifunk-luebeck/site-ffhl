@@ -59,7 +59,7 @@ ci['build-all'] = {
 		**VARIABLES,
 	},
 	"script": [
-		'PATH="$PATH:/usr/lib/ccache',
+		'PATH="$PATH:/usr/lib/ccache"',
 		"file $(which gcc)",
 		"tree -L 3",
 		"env | grep CI",
