@@ -1,4 +1,4 @@
-image: cuechan/gluon-build:latest
+image: debian:stable
 default:
   interruptible: true
 variables:
@@ -17,7 +17,8 @@ build-all:
   - fast
   before_script:
   - apt-get update > /dev/null
-  - apt-get install -y curl git tree ccache > /dev/null
+  - apt-get install -y curl git libncurses-dev build-essential make gawk unzip wget
+    python2.7 file tar bzip2 tree ccache > /dev/null
   - mkdir -p ccache
   cache:
     paths:
