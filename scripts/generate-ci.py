@@ -93,6 +93,7 @@ ci['test:images'] = {
 	],
 	"artifacts": {
 		"when": "always",
+		"expire_in": "1 day",
 		"paths": ["gluon/output"]
 	}
 }
@@ -113,6 +114,7 @@ ci['test:image-count'] = {
 	],
 	"artifacts": {
 		"when": "always",
+		"expire_in": "1 day",
 		"paths": ["gluon/output"]
 	}
 }
@@ -140,6 +142,7 @@ ci['manifest'] = {
 	],
 	"artifacts": {
 		"when": "always",
+		"expire_in": "1 day",
 		"paths": ["gluon/output"]
 	}
 }
