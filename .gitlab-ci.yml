@@ -1,6 +1,11 @@
 image: debian:stable
 default:
   interruptible: true
+before_script:
+- apt-get update > /dev/null
+- apt-get install -y curl git libncurses-dev build-essential make gawk unzip wget
+  python2.7 file tar bzip2 tree ccache > /dev/null
+- mkdir -p ccache
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
   FORCE_UNSAFE_CONFIGURE: '1'
@@ -15,14 +20,10 @@ build-all:
   stage: build
   tags:
   - fast
-  before_script:
-  - apt-get update > /dev/null
-  - apt-get install -y curl git libncurses-dev build-essential make gawk unzip wget
-    python2.7 file tar bzip2 tree ccache > /dev/null
-  - mkdir -p ccache
   cache:
     paths:
     - ccache
+    key: ${TARGET}
   parallel:
     matrix:
     - TARGET:

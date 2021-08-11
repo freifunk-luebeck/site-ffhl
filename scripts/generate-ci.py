@@ -26,6 +26,7 @@ ci = {
 	"default": {
 		"interruptible": True
 	},
+	"before_script": BEFORE_SCRIPT,
 	"variables": {
 		"GIT_SUBMODULE_STRATEGY": "recursive",
 		"FORCE_UNSAFE_CONFIGURE": "1",
@@ -42,8 +43,10 @@ ci = {
 ci['build-all'] = {
 	"stage": "build",
 	"tags": ["fast"],
-	"before_script": BEFORE_SCRIPT,
-	"cache": {"paths": ['ccache']},
+	"cache": {
+		"paths": ['ccache'],
+		"key": "${TARGET}",
+	},
 	"parallel": {
 		"matrix": [
 			{"TARGET": get_available_targets()}
