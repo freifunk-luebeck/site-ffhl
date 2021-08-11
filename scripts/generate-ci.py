@@ -14,6 +14,7 @@ BEFORE_SCRIPT = [
 	"apt-get update > /dev/null",
 	"apt-get install -y curl git libncurses-dev build-essential make gawk unzip wget python2.7 file tar bzip2 tree ccache > /dev/null",
 	"mkdir -p ccache",
+	'PATH="/usr/lib/ccache:$PATH"',
 ]
 
 VARIABLES = {
@@ -61,7 +62,6 @@ ci['build-all'] = {
 		**VARIABLES,
 	},
 	"script": [
-		'PATH="/usr/lib/ccache:$PATH"',
 		"file $(which gcc)",
 		"tree -L 3",
 		"env | grep CI",
@@ -128,13 +128,13 @@ ci['manifest'] = {
 	"stage": "deploy",
 	"needs": ["build-all"],
 	"tags": ["fast"],
+	"cache": {
+		"paths": ['ccache'],
+		"key": "manifest",
+	},
 	"variables": {
 		"FORCE_UNSAFE_CONFIGURE": "1",
 	},
-	"before_script": [
-		"apt update",
-		"apt install -y ecdsautils curl git libncurses-dev build-essential make gawk unzip wget python2.7 file tar bzip2 tree"
-	],
 	"script": [
 		"make -C gluon GLUON_SITEDIR=.. update",
 		"make -C gluon GLUON_SITEDIR=.. GLUON_PRIORITY=7 GLUON_AUTOUPDATER_BRANCH=stable GLUON_BRANCH=stable manifest",
