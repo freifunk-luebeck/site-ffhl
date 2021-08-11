@@ -12,7 +12,7 @@ def get_available_targets():
 
 BEFORE_SCRIPT = [
 	"apt-get update > /dev/null",
-	"apt-get install -y curl git libncurses-dev build-essential make gawk unzip wget python2.7 file tar bzip2 tree ccache > /dev/null",
+	"apt-get install -y curl git libncurses-dev build-essential make gawk unzip wget python2.7 file tar bzip2 tree ccache ecdsautils > /dev/null",
 	"mkdir -p ccache",
 	'PATH="/usr/lib/ccache:$PATH"',
 ]
