@@ -174,6 +174,17 @@ ci['deploy'] = {
 	]
 }
 
+ci['pages'] = {
+	"stage": "upload",
+	"needs": ["test:images", "test:image-count", "manifest"],
+	"script": [
+		"TAG=${CI_COMMIT_REF_SLUG}_$(date +%F_%H-%M-%S)",
+		'mkdir -p public',
+		"mv gluon/output/* public",
+		'find public/ -type d -exec sh -c \'tree -I "index.html" -H "." -T "$TAG" -s -h --si -L 2 "{}" > "{}/index.html" \' \;',
+	]
+}
+
 
 
 print(yaml.dump(ci, sort_keys=False,))
