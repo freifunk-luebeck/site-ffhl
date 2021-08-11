@@ -167,4 +167,9 @@ pages:
   - mv gluon/output/* public
   - find public/ -type d -exec sh -c 'tree -I "index.html" -H "." -T "$TAG" -s -h
     --si -L 2 "{}" > "{}/index.html" ' \;
+  artifacts:
+    when: always
+    expire_in: 1 day
+    paths:
+    - public
 
