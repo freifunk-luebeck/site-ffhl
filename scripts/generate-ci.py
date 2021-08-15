@@ -23,7 +23,7 @@ VARIABLES = {
 }
 
 ci = {
-	"image": "debian:stable",
+	"image": "debian:buster",
 	"default": {
 		"interruptible": True
 	},
