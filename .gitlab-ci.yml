@@ -1,9 +1,17 @@
-image: cuechan/gluon-build:latest
+image: debian:buster
 default:
   interruptible: true
+before_script:
+- apt-get update > /dev/null
+- apt-get install -y curl git libncurses-dev build-essential make gawk unzip wget
+  python2.7 file tar bzip2 tree ccache ecdsautils > /dev/null
+- mkdir -p ccache
+- PATH="/usr/lib/ccache:$PATH"
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
   FORCE_UNSAFE_CONFIGURE: '1'
+  CCACHE_DIR: $CI_PROJECT_DIR/ccache
+  CCACHE_MAXSIZE: 20G
 stages:
 - build
 - test
@@ -13,15 +21,10 @@ build-all:
   stage: build
   tags:
   - fast
-  variables:
-    GLUON_SITEDIR: ..
-    GLUON_DEPRECATED: 1
-    GLUON_AUTOUPDATER_ENABLED: 1
-    GLUON_AUTOUPDATER_BRANCH: stable
-    GLUON_BRANCH: $GLUON_AUTOUPDATER_BRANCH
-  before_script:
-  - apt-get update > /dev/null
-  - apt-get install -y curl git tree > /dev/null
+  cache:
+    paths:
+    - ccache
+    key: ${TARGET}
   parallel:
     matrix:
     - TARGET:
@@ -46,19 +49,31 @@ build-all:
       - x86-geode
       - x86-legacy
       - x86-64
+  variables:
+    GLUON_SITEDIR: ..
+    GLUON_DEPRECATED: 1
+    GLUON_AUTOUPDATER_ENABLED: 1
+    GLUON_AUTOUPDATER_BRANCH: stable
+    GLUON_BRANCH: $GLUON_AUTOUPDATER_BRANCH
+    CCACHE_DIR: $CI_PROJECT_DIR/ccache
+    CCACHE_MAXSIZE: 20G
   script:
+  - file $(which gcc)
   - tree -L 3
   - env | grep CI
   - make -C gluon update
   - 'make -C gluon -j $((($(nproc)+1) / 2)) GLUON_TARGET=$TARGET '
+  - ccache -s
   artifacts:
     when: always
+    expire_in: 1 day
     paths:
     - gluon/output
 test:images:
   stage: test
   needs:
   - build-all
+  allow_failure: true
   before_script:
   - apt update
   - apt install -qq -y tree
@@ -71,12 +86,14 @@ test:images:
   - ls gluon/output/images/sysupgrade/ | grep wdr4300
   artifacts:
     when: always
+    expire_in: 1 day
     paths:
     - gluon/output
 test:image-count:
   stage: test
   needs:
   - build-all
+  allow_failure: true
   before_script:
   - apt update
   - apt install -qq -y tree
@@ -86,6 +103,7 @@ test:image-count:
   - '[ $N -ge 260 ]'
   artifacts:
     when: always
+    expire_in: 1 day
     paths:
     - gluon/output
 manifest:
@@ -94,12 +112,12 @@ manifest:
   - build-all
   tags:
   - fast
+  cache:
+    paths:
+    - ccache
+    key: manifest
   variables:
     FORCE_UNSAFE_CONFIGURE: '1'
-  before_script:
-  - apt update
-  - apt install -y ecdsautils curl git libncurses-dev build-essential make gawk unzip
-    wget python2.7 file tar bzip2 tree
   script:
   - make -C gluon GLUON_SITEDIR=.. update
   - make -C gluon GLUON_SITEDIR=.. GLUON_PRIORITY=7 GLUON_AUTOUPDATER_BRANCH=stable
@@ -112,6 +130,7 @@ manifest:
   - ./gluon/contrib/sign.sh ecdsa.key gluon/output/images/sysupgrade/experimental.manifest
   artifacts:
     when: always
+    expire_in: 1 day
     paths:
     - gluon/output
 deploy:
@@ -136,4 +155,21 @@ deploy:
   - ln -s ./$TAG ./latest
   - rsync -rvhl ./$TAG ${DEPLOY_USER}@${DEPLOY_HOST}:data/
   - rsync -rvhl ./latest ${DEPLOY_USER}@${DEPLOY_HOST}:data/
+pages:
+  stage: upload
+  needs:
+  - test:images
+  - test:image-count
+  - manifest
+  script:
+  - TAG=${CI_COMMIT_REF_SLUG}_$(date +%F_%H-%M-%S)
+  - mkdir -p public
+  - mv gluon/output/* public
+  - find public/ -type d -exec sh -c 'tree -I "index.html" -H "." -T "$TAG" -s -h
+    --si -L 2 "{}" > "{}/index.html" ' \;
+  artifacts:
+    when: always
+    expire_in: 1 day
+    paths:
+    - public
 
