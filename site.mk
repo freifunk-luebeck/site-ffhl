@@ -21,7 +21,7 @@ GLUON_SITE_PACKAGES := \
 	respondd-module-airtime
 
 
-DEFAULT_GLUON_RELEASE := 0.14.1~exp$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := 0.14.2~exp$(shell date '+%Y%m%d')
 
 # gitlab-ci: use commit tag, if avalable as version number
 GLUON_RELEASE ?= $(CI_COMMIT_TAG)
