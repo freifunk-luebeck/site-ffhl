@@ -181,7 +181,7 @@ ci['test:manifest-length'] = {
 
 ci['upload'] = {
 	"stage": "deploy",
-	"needs": ["test:images", "test:image-count", "manifest"],
+	# "needs": ["test:images", "test:image-count", "manifest"],
 	"before_script": [
 		"apt-get -qq update",
 		"apt-get -qq install -y git make gawk wget python2.7 file tar bzip2 rsync tree",
@@ -204,7 +204,7 @@ ci['upload'] = {
 
 ci['pages'] = {
 	"stage": "deploy",
-	"needs": ["test:images", "test:image-count", "manifest"],
+	# "needs": ["test:images", "test:image-count", "manifest"],
 	"script": [
 		"TAG=${CI_COMMIT_REF_SLUG}_$(date +%F_%H-%M-%S)",
 		'mkdir -p public',
