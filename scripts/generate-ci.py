@@ -4,6 +4,9 @@ import yaml
 import subprocess
 import os
 
+
+ARTIFACTS_EXPIRE="3 day"
+
 MAKE_FLAGS=["--silent", "-C", "gluon", "GLUON_SITEDIR=.."]
 
 def get_available_targets():
@@ -36,8 +39,9 @@ ci = {
 	"stages": [
 		"build",
 		"test",
+		"prepare-deploy",
+		"test-deploy",
 		"deploy",
-		"upload",
 	]
 }
 
@@ -71,7 +75,7 @@ ci['build-all'] = {
 	],
 	"artifacts": {
 		"when": "always",
-		"expire_in": "1 day",
+		"expire_in": ARTIFACTS_EXPIRE,
 		"paths": ["gluon/output"]
 	}
 }
@@ -96,7 +100,7 @@ ci['test:images'] = {
 	],
 	"artifacts": {
 		"when": "always",
-		"expire_in": "1 day",
+		"expire_in": ARTIFACTS_EXPIRE,
 		"paths": ["gluon/output"]
 	}
 }
@@ -117,7 +121,7 @@ ci['test:image-count'] = {
 	],
 	"artifacts": {
 		"when": "always",
-		"expire_in": "1 day",
+		"expire_in": ARTIFACTS_EXPIRE,
 		"paths": ["gluon/output"]
 	}
 }
@@ -125,7 +129,7 @@ ci['test:image-count'] = {
 
 
 ci['manifest'] = {
-	"stage": "deploy",
+	"stage": "prepare-deploy",
 	"needs": ["build-all"],
 	"tags": ["fast"],
 	"cache": {
@@ -145,14 +149,38 @@ ci['manifest'] = {
 	],
 	"artifacts": {
 		"when": "always",
-		"expire_in": "1 day",
+		"expire_in": ARTIFACTS_EXPIRE,
 		"paths": ["gluon/output"]
 	}
 }
 
 
-ci['deploy'] = {
-	"stage": "upload",
+
+ci['test:manifest-length'] = {
+	"stage": "test-deploy",
+	"needs": ["manifest"],
+	"before_script": [
+		"apt update",
+		"apt install -qq -y tree"
+	],
+	"script": [
+		# check the number of images
+		"for manifest in gluon/output/images/sysupgrade/*.manifest; do"
+		"echo checking $manifest..."
+		"N=$(cat $manifest | wc -l)",
+		"echo manifest is $N lines long",
+		"[ $N -ge 800 ]"
+	],
+	"artifacts": {
+		"when": "always",
+		"paths": ["gluon/output"]
+	}
+}
+
+
+
+ci['upload'] = {
+	"stage": "deploy",
 	"needs": ["test:images", "test:image-count", "manifest"],
 	"before_script": [
 		"apt-get -qq update",
@@ -175,7 +203,7 @@ ci['deploy'] = {
 }
 
 ci['pages'] = {
-	"stage": "upload",
+	"stage": "deploy",
 	"needs": ["test:images", "test:image-count", "manifest"],
 	"script": [
 		"TAG=${CI_COMMIT_REF_SLUG}_$(date +%F_%H-%M-%S)",
@@ -185,9 +213,14 @@ ci['pages'] = {
 	],
 	"artifacts": {
 		"when": "always",
-		"expire_in": "1 day",
+		"expire_in": ARTIFACTS_EXPIRE,
 		"paths": ["public"]
-	}
+	},
+	# only upload if this is the default branch
+	"rules": [
+		{"if": "$CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH"}
+	]
+
 }
 
 

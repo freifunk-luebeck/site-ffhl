@@ -15,8 +15,9 @@ variables:
 stages:
 - build
 - test
+- prepare-deploy
+- test-deploy
 - deploy
-- upload
 build-all:
   stage: build
   tags:
@@ -66,7 +67,7 @@ build-all:
   - ccache -s
   artifacts:
     when: always
-    expire_in: 1 day
+    expire_in: 3 day
     paths:
     - gluon/output
 test:images:
@@ -86,7 +87,7 @@ test:images:
   - ls gluon/output/images/sysupgrade/ | grep wdr4300
   artifacts:
     when: always
-    expire_in: 1 day
+    expire_in: 3 day
     paths:
     - gluon/output
 test:image-count:
@@ -103,11 +104,11 @@ test:image-count:
   - '[ $N -ge 260 ]'
   artifacts:
     when: always
-    expire_in: 1 day
+    expire_in: 3 day
     paths:
     - gluon/output
 manifest:
-  stage: deploy
+  stage: prepare-deploy
   needs:
   - build-all
   tags:
@@ -130,11 +131,27 @@ manifest:
   - ./gluon/contrib/sign.sh ecdsa.key gluon/output/images/sysupgrade/experimental.manifest
   artifacts:
     when: always
-    expire_in: 1 day
+    expire_in: 3 day
     paths:
     - gluon/output
-deploy:
-  stage: upload
+test:manifest-length:
+  stage: test-deploy
+  needs:
+  - manifest
+  before_script:
+  - apt update
+  - apt install -qq -y tree
+  script:
+  - for manifest in gluon/output/images/sysupgrade/*.manifest; doecho checking $manifest...N=$(cat
+    $manifest | wc -l)
+  - echo manifest is $N lines long
+  - '[ $N -ge 800 ]'
+  artifacts:
+    when: always
+    paths:
+    - gluon/output
+upload:
+  stage: deploy
   needs:
   - test:images
   - test:image-count
@@ -156,7 +173,7 @@ deploy:
   - rsync -rvhl ./$TAG ${DEPLOY_USER}@${DEPLOY_HOST}:data/
   - rsync -rvhl ./latest ${DEPLOY_USER}@${DEPLOY_HOST}:data/
 pages:
-  stage: upload
+  stage: deploy
   needs:
   - test:images
   - test:image-count
@@ -169,7 +186,9 @@ pages:
     --si -L 2 "{}" > "{}/index.html" ' \;
   artifacts:
     when: always
-    expire_in: 1 day
+    expire_in: 3 day
     paths:
     - public
+  rules:
+  - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
 
