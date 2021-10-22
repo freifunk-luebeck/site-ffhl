@@ -142,10 +142,11 @@ test:manifest-length:
   - apt update
   - apt install -qq -y tree
   script:
-  - for manifest in gluon/output/images/sysupgrade/*.manifest; doecho checking $manifest...N=$(cat
+  - for manifest in gluon/output/images/sysupgrade/*.manifest; do;echo checking $manifest...N=$(cat
     $manifest | wc -l)
   - echo manifest is $N lines long
   - '[ $N -ge 800 ]'
+  - done
   artifacts:
     when: always
     paths:

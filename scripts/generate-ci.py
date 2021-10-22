@@ -165,11 +165,12 @@ ci['test:manifest-length'] = {
 	],
 	"script": [
 		# check the number of images
-		"for manifest in gluon/output/images/sysupgrade/*.manifest; do"
+		"for manifest in gluon/output/images/sysupgrade/*.manifest; do;"
 		"echo checking $manifest..."
 		"N=$(cat $manifest | wc -l)",
 		"echo manifest is $N lines long",
-		"[ $N -ge 800 ]"
+		"[ $N -ge 800 ]",
+		"done",
 	],
 	"artifacts": {
 		"when": "always",
