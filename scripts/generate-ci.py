@@ -58,7 +58,7 @@ ci['check-ci-tests'] = {
 		"apk add shellcheck bash"
 	],
 	"script": [
-		"bash scripts/ci/test_manifest_length.sh"
+		"shellcheck scripts/ci/test_manifest_length.sh"
 	]
 }
 

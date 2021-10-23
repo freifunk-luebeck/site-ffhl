@@ -27,7 +27,7 @@ check-ci-tests:
   - apk update
   - apk add shellcheck bash
   script:
-  - bash scripts/ci/test_manifest_length.sh
+  - shellcheck scripts/ci/test_manifest_length.sh
 build-all:
   stage: build
   tags:
