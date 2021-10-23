@@ -37,6 +37,7 @@ ci = {
 		**VARIABLES,
 	},
 	"stages": [
+		"pre-build-tests",
 		"build",
 		"test",
 		"prepare-deploy",
@@ -44,6 +45,24 @@ ci = {
 		"deploy",
 	]
 }
+
+
+# some tests before we do anything
+
+ci['check-ci-tests'] = {
+	"image": "alpine:latest",
+	"stage": "pre-build-tests",
+	"allow_failure": False,
+	"before_script": [
+		"apk update",
+		"apk add shellcheck bash"
+	],
+	"script": [
+		"bash scripts/ci/test_manifest_length.sh"
+	]
+}
+
+
 
 ci['build-all'] = {
 	"stage": "build",
@@ -159,18 +178,10 @@ ci['manifest'] = {
 ci['test:manifest-length'] = {
 	"stage": "test-deploy",
 	"needs": ["manifest"],
-	"before_script": [
-		"apt update",
-		"apt install -qq -y tree"
-	],
+	"before_script": [],
 	"script": [
 		# check the number of images
-		"for manifest in gluon/output/images/sysupgrade/*.manifest; do;"
-		"echo checking $manifest..."
-		"N=$(cat $manifest | wc -l)",
-		"echo manifest is $N lines long",
-		"[ $N -ge 800 ]",
-		"done",
+		"bash scripts/ci/test_manifest_length.sh"
 	],
 	"artifacts": {
 		"when": "always",

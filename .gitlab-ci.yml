@@ -13,11 +13,21 @@ variables:
   CCACHE_DIR: $CI_PROJECT_DIR/ccache
   CCACHE_MAXSIZE: 20G
 stages:
+- pre-build-tests
 - build
 - test
 - prepare-deploy
 - test-deploy
 - deploy
+check-ci-tests:
+  image: alpine:latest
+  stage: pre-build-tests
+  allow_failure: false
+  before_script:
+  - apk update
+  - apk add shellcheck bash
+  script:
+  - bash scripts/ci/test_manifest_length.sh
 build-all:
   stage: build
   tags:
@@ -138,15 +148,9 @@ test:manifest-length:
   stage: test-deploy
   needs:
   - manifest
-  before_script:
-  - apt update
-  - apt install -qq -y tree
+  before_script: []
   script:
-  - for manifest in gluon/output/images/sysupgrade/*.manifest; do;echo checking $manifest...N=$(cat
-    $manifest | wc -l)
-  - echo manifest is $N lines long
-  - '[ $N -ge 800 ]'
-  - done
+  - bash scripts/ci/test_manifest_length.sh
   artifacts:
     when: always
     paths:
