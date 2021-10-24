@@ -159,7 +159,7 @@ ci['manifest'] = {
 		"FORCE_UNSAFE_CONFIGURE": "1",
 	},
 	"script": [
-		"make -C gluon GLUON_SITEDIR=.. update",
+		# "make -C gluon GLUON_SITEDIR=.. update",
 		"make -C gluon GLUON_SITEDIR=.. GLUON_PRIORITY=7 GLUON_AUTOUPDATER_BRANCH=stable GLUON_BRANCH=stable manifest",
 		"make -C gluon GLUON_SITEDIR=.. GLUON_PRIORITY=0 GLUON_AUTOUPDATER_BRANCH=beta GLUON_BRANCH=beta manifest",
 		"make -C gluon GLUON_SITEDIR=.. GLUON_PRIORITY=0 GLUON_AUTOUPDATER_BRANCH=experimental GLUON_BRANCH=experimental manifest",
