@@ -65,6 +65,7 @@ ci['check-ci-tests'] = {
 
 
 ci['build-all'] = {
+	"image": "registry.chaotikum.net/freifunk-luebeck/gluon-build:latest",
 	"stage": "build",
 	"tags": ["fast"],
 	"cache": {

@@ -29,6 +29,7 @@ check-ci-tests:
   script:
   - shellcheck scripts/ci/test_manifest_length.sh
 build-all:
+  image: registry.chaotikum.net/freifunk-luebeck/gluon-build:latest
   stage: build
   tags:
   - fast
