@@ -4,6 +4,9 @@ import yaml
 import subprocess
 import os
 
+
+ARTIFACTS_EXPIRE="3 day"
+
 MAKE_FLAGS=["--silent", "-C", "gluon", "GLUON_SITEDIR=.."]
 
 def get_available_targets():
@@ -34,14 +37,35 @@ ci = {
 		**VARIABLES,
 	},
 	"stages": [
+		"pre-build-tests",
 		"build",
 		"test",
+		"prepare-deploy",
+		"test-deploy",
 		"deploy",
-		"upload",
 	]
 }
 
+
+# some tests before we do anything
+
+ci['check-ci-tests'] = {
+	"image": "alpine:latest",
+	"stage": "pre-build-tests",
+	"allow_failure": False,
+	"before_script": [
+		"apk update",
+		"apk add shellcheck bash"
+	],
+	"script": [
+		"shellcheck scripts/ci/test_manifest_length.sh"
+	]
+}
+
+
+
 ci['build-all'] = {
+	"image": "registry.chaotikum.net/freifunk-luebeck/gluon-build:latest",
 	"stage": "build",
 	"tags": ["fast"],
 	"cache": {
@@ -71,7 +95,7 @@ ci['build-all'] = {
 	],
 	"artifacts": {
 		"when": "always",
-		"expire_in": "1 day",
+		"expire_in": ARTIFACTS_EXPIRE,
 		"paths": ["gluon/output"]
 	}
 }
@@ -96,7 +120,7 @@ ci['test:images'] = {
 	],
 	"artifacts": {
 		"when": "always",
-		"expire_in": "1 day",
+		"expire_in": ARTIFACTS_EXPIRE,
 		"paths": ["gluon/output"]
 	}
 }
@@ -117,7 +141,7 @@ ci['test:image-count'] = {
 	],
 	"artifacts": {
 		"when": "always",
-		"expire_in": "1 day",
+		"expire_in": ARTIFACTS_EXPIRE,
 		"paths": ["gluon/output"]
 	}
 }
@@ -125,7 +149,7 @@ ci['test:image-count'] = {
 
 
 ci['manifest'] = {
-	"stage": "deploy",
+	"stage": "prepare-deploy",
 	"needs": ["build-all"],
 	"tags": ["fast"],
 	"cache": {
@@ -145,15 +169,32 @@ ci['manifest'] = {
 	],
 	"artifacts": {
 		"when": "always",
-		"expire_in": "1 day",
+		"expire_in": ARTIFACTS_EXPIRE,
 		"paths": ["gluon/output"]
 	}
 }
 
 
-ci['deploy'] = {
-	"stage": "upload",
-	"needs": ["test:images", "test:image-count", "manifest"],
+
+ci['test:manifest-length'] = {
+	"stage": "test-deploy",
+	"needs": ["manifest"],
+	"before_script": [],
+	"script": [
+		# check the number of images
+		"bash scripts/ci/test_manifest_length.sh"
+	],
+	"artifacts": {
+		"when": "always",
+		"paths": ["gluon/output"]
+	}
+}
+
+
+
+ci['upload'] = {
+	"stage": "deploy",
+	# "needs": ["test:images", "test:image-count", "manifest"],
 	"before_script": [
 		"apt-get -qq update",
 		"apt-get -qq install -y git make gawk wget python2.7 file tar bzip2 rsync tree",
@@ -175,8 +216,8 @@ ci['deploy'] = {
 }
 
 ci['pages'] = {
-	"stage": "upload",
-	"needs": ["test:images", "test:image-count", "manifest"],
+	"stage": "deploy",
+	# "needs": ["test:images", "test:image-count", "manifest"],
 	"script": [
 		"TAG=${CI_COMMIT_REF_SLUG}_$(date +%F_%H-%M-%S)",
 		'mkdir -p public',
@@ -185,9 +226,14 @@ ci['pages'] = {
 	],
 	"artifacts": {
 		"when": "always",
-		"expire_in": "1 day",
+		"expire_in": ARTIFACTS_EXPIRE,
 		"paths": ["public"]
-	}
+	},
+	# only upload if this is the default branch
+	"rules": [
+		{"if": "$CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH"}
+	]
+
 }
 
 
