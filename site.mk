@@ -6,7 +6,7 @@ GLUON_FEATURES := \
 	ebtables-filter-ra-dhcp \
 	ebtables-source-filter \
 	mesh-batman-adv-15 \
-	mesh-vpn-fastd \
+	mesh-vpn-wireguard \
 	scheduled-domain-switch \
 	radvd \
 	respondd \
