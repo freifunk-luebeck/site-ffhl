@@ -26,7 +26,7 @@ VARIABLES = {
 }
 
 ci = {
-	"image": "debian:buster",
+	"image": "registry.chaotikum.net/freifunk-luebeck/gluon-build:latest",
 	"default": {
 		"interruptible": True
 	},
