@@ -7,12 +7,10 @@ GLUON_FEATURES := \
 	ebtables-source-filter \
 	mesh-batman-adv-15 \
 	mesh-vpn-wireguard \
-	scheduled-domain-switch \
 	radvd \
 	respondd \
 	status-page \
 	web-advanced \
-	web-mesh-vpn-fastd \
 	web-private-wifi \
 	web-wizard
 
