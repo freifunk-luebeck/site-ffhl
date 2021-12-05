@@ -24,7 +24,7 @@ GLUON_SITE_PACKAGES := \
 DEFAULT_GLUON_RELEASE := 0.14.2~exp$(shell date '+%Y%m%d')
 
 # gitlab-ci: use commit tag, if avalable as version number
-GLUON_RELEASE ?= $(CI_COMMIT_TAG)
+GLUON_RELEASE ?=  $(subst v,,$(CI_COMMIT_TAG)) # remove the **v** from version number, because it breaks the autoupdater
 ifeq ($(GLUON_RELEASE),)
 	GLUON_RELEASE := $(DEFAULT_GLUON_RELEASE)
 endif
